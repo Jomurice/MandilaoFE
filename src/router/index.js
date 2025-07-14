@@ -7,7 +7,7 @@ import HomeUser from '../components/home/HomeUser.vue';
 import HomeAdmin from '../components/home/HomeAdmin.vue';
 import eventPage from "../components/eventPage/eventPage.vue";
 import eventDetail from "../components/eventPage/eventDetail.vue";
-
+import profileUser from "../components/account/profile-user.vue";
 const routes =[
     { path: '/', name: 'Home', component: HomeUser },
     { path: '/Admin', name: 'Admin', component: HomeAdmin },
