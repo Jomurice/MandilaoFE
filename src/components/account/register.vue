@@ -110,6 +110,10 @@
       outline: none;
       font-size: 1rem;
     }
+    .register-form input:hover::placeholder{
+        color: red;
+    }
+
     #date-input{
       margin-bottom: 20px;
       width: 100%;
@@ -126,7 +130,8 @@
     }
 
     .register-form input:hover {
-      border-color: rgb(15, 96, 96);
+      border-color: rgb(233, 37, 119);
+
     }
 
    

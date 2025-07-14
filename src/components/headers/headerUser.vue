@@ -4,7 +4,7 @@
       <ul class="nav-links">
         <li><router-link to="/" class="nav-item">Home</router-link></li>
         <li><router-link to="/mon-an" class="nav-item">Món ăn</router-link></li>
-        <li><router-link to="/khuyen-mai" class="nav-item">Khuyến Mãi</router-link></li>
+        <li><router-link to="/eventPage" class="nav-item">Sự kiện</router-link></li>
       </ul>
 
       <div class="logo-container">
@@ -15,8 +15,8 @@
 
       <ul class="nav-links right">
         <li><router-link to="/gioi-thieu" class="nav-item">Giới Thiệu</router-link></li>
-        <li><router-link to="/dang-ky" class="nav-item">Đăng Ký</router-link></li>
-        <li><router-link to="/dang-nhap" class="nav-item">Đăng Nhập</router-link></li>
+        <li><router-link to="/register" class="nav-item">Đăng Ký</router-link></li>
+        <li><router-link to="/login" class="nav-item">Đăng Nhập</router-link></li>
       </ul>
     </nav>
   </header>
@@ -29,6 +29,7 @@ export default {
 </script>
 
 <style scoped>
+
 .header-container {
   width: 100vw;
   background-color: #FFA500;
@@ -55,8 +56,16 @@ export default {
   justify-content: flex-start;
 }
 
+
+
+
 .nav-links li {
   margin: 0 15px;
+}
+
+.nav-links li .nav-item:hover{
+ 
+  color:rgb(122, 3, 33);
 }
 
 .nav-item {
@@ -69,9 +78,11 @@ export default {
 
 .nav-item:hover {
   color: #f0f0f0;
+ 
 }
 
 .logo-container {
+  height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -79,7 +90,7 @@ export default {
 }
 
 .logo {
-  height: 60px;
+  height: 150px;
   object-fit: contain;
 }
 

@@ -5,7 +5,6 @@ import adminLogin from "../components/login/adminLogin.vue";
 import register from "../components/account/register.vue";
 import HomeUser from '../components/home/HomeUser.vue';
 import HomeAdmin from '../components/home/HomeAdmin.vue';
-
 import eventPage from "../components/eventPage/eventPage.vue";
 import eventDetail from "../components/eventPage/eventDetail.vue";
 

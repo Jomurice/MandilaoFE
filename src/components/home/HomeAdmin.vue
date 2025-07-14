@@ -53,17 +53,17 @@ export default {
         {
           name: 'Bò wagyu',
           price: '280.000 VNĐ',
-          image: '@/assets/bo-wagyu.jpg'
+          image: '/img/p4.jpg'
         },
         {
           name: 'Bò shabu',
           price: '450.000 VNĐ',
-          image: '@/assets/bo-shabu.jpg'
+          image: '/img/p6.jpg'
         },
         {
           name: 'Quân',
           price: '960.000 VNĐ',
-          image: '@/assets/quan.jpg'
+          image: '/img/p5.jpg'
         }
       ]
     }

@@ -1,10 +1,10 @@
 <template>
   <div class="home-user-container">
-    <headerUser />
+    
 
     <!-- Banner -->
     <section class="main-banner">
-      <img src="" alt="Main Banner" class="banner-image">
+      <img src="/img/Background1.jpg" alt="Main Banner" class="banner-image">
       <div class="banner-overlay">
         <h1 class="banner-title">Made in Vietnamese.</h1>
         <h2 class="banner-subtitle">Enjoy in restaurant.</h2>
@@ -12,6 +12,11 @@
       <div class="carousel-nav left"> &lt; </div>
       <div class="carousel-nav right"> &gt; </div>
     </section>
+
+    <!-- <section class=".events-section">
+      <EventPage/>
+    </section> -->
+     
 
     <!-- Món mới -->
     <section class="new-dishes-section">
@@ -32,23 +37,7 @@
       </div>
     </section>
 
-    <!-- Sự kiện -->
-    <section class="events-section">
-      <h2 class="section-title">Sự kiện</h2>
-      <div class="events-grid">
-        <div class="carousel-nav-small left"> &lt; </div>
-        <div v-for="event in events" :key="event.id" class="event-card">
-          <img :src="event.image" :alt="event.title" class="event-image">
-          <div class="event-overlay">
-            <h3 class="event-title">{{ event.title }}</h3>
-            <p class="event-price">{{ event.price }}</p>
-            <button class="read-more-btn">Read More</button>
-          </div>
-        </div>
-        <div class="carousel-nav-small right"> &gt; </div>
-      </div>
-    </section>
-
+   
     <!-- Footer -->
     <footer class="footer-container">
       <div class="footer-info">
@@ -74,7 +63,10 @@
   </div>
 </template>
 
-<script>
+<script >
+
+
+
 import HeaderUser from '../headers/headerUser.vue';
 export default {
   name: 'HomeUser',
@@ -89,11 +81,11 @@ export default {
         { id: 3, title: 'Summer Sale', price: '299k', image: 'event3.jpg' },
       ],
       newDishes: [
-        { id: 1, name: 'Wagyu Jepang', price: '480.000 VNĐ', image: '' },
-        { id: 2, name: 'Lidah Sapi NZ', price: '118.000 VNĐ', image: '' },
-        { id: 3, name: 'US Angus', price: '198.000 VNĐ', image: '' },
-        { id: 4, name: 'US Angus 2', price: '198.000 VNĐ', image: '' },
-        { id: 5, name: 'US Angus 3', price: '198.000 VNĐ', image: '' },
+        { id: 1, name: 'Wagyu Jepang', price: '480.000 VNĐ', image: '/img/p1.jpg' },
+        { id: 2, name: 'Lidah Sapi NZ', price: '118.000 VNĐ', image: '/img/p2.jpg' },
+        { id: 3, name: 'US Angus', price: '198.000 VNĐ', image: '/img/p3.jpg' },
+        { id: 4, name: 'US Angus 2', price: '198.000 VNĐ', image: '/img/p4.jpg' },
+        { id: 5, name: 'US Angus 3', price: '198.000 VNĐ', image: '/img/p5.jpg' },
       ]
     };
   },
@@ -123,6 +115,7 @@ export default {
 <style scoped>
 .home-user-container {
   width: 100%;
+  height: 100%;
   justify-content: center;
   overflow-x: hidden;
 

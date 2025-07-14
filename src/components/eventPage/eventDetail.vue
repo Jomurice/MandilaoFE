@@ -15,7 +15,8 @@
         Gói combo dành cho 1 người với đầy đủ món khai vị, món chính và tráng miệng. 
         Hoàn hảo cho bữa ăn đơn giản nhưng đầy đủ hương vị!
       </p>
-        <button class="btn"> <- Quay lại</button>
+       <router-link to="/eventpage" class="btn"> <- Quay lại</router-link>
+       
       </div>
     </div>
 
@@ -76,6 +77,7 @@
   border-radius: 5px;
   font-weight: bold;
   cursor: pointer;
+  text-decoration: none;
 }
 
 

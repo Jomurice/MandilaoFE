@@ -124,8 +124,13 @@ if (err.response && err.response.status === 401) {
       outline: none;
       font-size: 1rem;
     }
-.login-form input:hover {
-      border-color: rgb(15, 96, 96);
+    
+    .login-form input:hover {
+      border-color: rgb(188, 23, 100);
+    }
+
+     .login-form input:hover::placeholder{
+        color: red;
     }
 
     .remember {

@@ -12,7 +12,7 @@ const hello = "hello";
           <h2>Combo 1 người</h2>
           <p>349k</p>
         </div>
-        <a href="#" class="btn">Read More</a>
+        <router-link to="/eventdetail" class="btn">Read More</router-link>
       </div>
 
       <div class="card">
@@ -21,7 +21,7 @@ const hello = "hello";
           <h2>Combo couple</h2>
           <p>749k</p>
         </div>
-        <a href="#" class="btn">Read More</a>
+         <router-link to="/eventdetail" class="btn">Read More</router-link>
       </div>
 
       <div class="card">
@@ -30,7 +30,7 @@ const hello = "hello";
           <h2>Combo family</h2>
           <p>1249k</p>
         </div>
-        <a href="#" class="btn">Read More</a>
+        <router-link to="/eventdetail" class="btn">Read More</router-link>
       </div>
 
       <div class="card">
@@ -39,7 +39,7 @@ const hello = "hello";
           <h2>Thành viên mới</h2>
           <p>249k</p>
         </div>
-        <a href="#" class="btn">Read More</a>
+         <router-link to="/eventdetail" class="btn">Read More</router-link>
       </div>
     </div>
   </div>
