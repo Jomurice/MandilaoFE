@@ -1,6 +1,7 @@
 <script setup>
 import login from './components/login/login.vue';
 import register from './components/account/register.vue';
+
 </script>
 
 <template>
