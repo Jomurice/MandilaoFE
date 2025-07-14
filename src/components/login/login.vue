@@ -9,16 +9,15 @@ const username = ref('');
 const password = ref('');
 const error = ref('');
 const router = useRouter();
-const isLoading = ref(false);
 
 const userStore = userStorage();
 
 async function handleLogin(){
-  if(isLoading.value) return;
+
   error.value = '';
   try{
     const resp = await axios.post(
-      "/api/auth/login",
+      "http://localhost:8080/identity/auth/login",
       {
         username: username.value,
         password: password.value
@@ -26,10 +25,10 @@ async function handleLogin(){
       {
         headers: {
            'Content-Type': 'application/json'
-        },
-        withCredentials: true
+        }
       }
     );
+
     userStore.setUser(resp.data)
     router.push("/register")
 
@@ -42,7 +41,7 @@ if (err.response && err.response.status === 401) {
     }
   }
   finally {
-        isLoading.value = false;
+        
     }
 }
 
