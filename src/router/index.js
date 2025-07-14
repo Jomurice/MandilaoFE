@@ -8,6 +8,7 @@ import HomeAdmin from '../components/home/HomeAdmin.vue';
 
 import eventPage from "../components/eventPage/eventPage.vue";
 import eventDetail from "../components/eventPage/eventDetail.vue";
+import profileUser from "../components/account/profile-user.vue";
 
 const routes =[
      { path: '/', name: 'Home', component: HomeUser },
@@ -16,7 +17,8 @@ const routes =[
     {path:"/adminLogin", component: adminLogin},
     {path:"/register", component: register},
     {path: "/eventPage", component: eventPage},
-    {path: "/eventDetail", component: eventDetail}
+    {path: "/eventDetail", component: eventDetail},
+    {path:"/profileuser", component: profileUser}
    
 
    
