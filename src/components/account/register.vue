@@ -25,6 +25,7 @@ const router = useRouter();
 
 const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const regexPhone = /^(?:\+84|0)(3|5|7|8|9)[0-9]{8}$/;
+const regexCheckerSpace = " ";
 
 function convertPhone(phoneInput) {
   const trimmed = phoneInput.trim();
@@ -43,6 +44,8 @@ function validation() {
   errors.password = "";
   errors.dob = "";
 
+
+
   if (!fullname.value.trim()) {
     errors.fullname = "Vui lòng nhập họ tên";
     isValid = false;
@@ -53,8 +56,8 @@ function validation() {
     isValid = false;
   }
 
-  if (!username.value.trim()) {
-    errors.username = "Vui lòng nhập Username";
+  if (!username.value.trim() || username.value.match(spaceChecher)) {
+    errors.username = "Vui lòng nhập Username hợp lệ";
     isValid = false;
   }
 
@@ -63,7 +66,7 @@ function validation() {
     isValid = false;
   }
 
-  if (!password.value.trim() || password.value.length < 6) {
+  if (!password.value.trim() || password.value.length < 6 || password.value.match(regexCheckerSpace)) {
     errors.password = "Mật khẩu ít nhất 6 ký tự";
     isValid = false;
   }
