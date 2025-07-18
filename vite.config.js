@@ -11,6 +11,7 @@ export default defineConfig({
     //     changeOrigin: true,
     //     secure: false, // chỉ dùng dev local, không được dùng trong production deploy.
     //     rewrite: path => path.replace(/^\/api/, ''), // <- Quan trọng!
+    //     secure: false // chỉ dùng dev local, không được dùng trong production deploy.
     //   }
     // }
   }
