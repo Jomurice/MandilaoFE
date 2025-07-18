@@ -29,8 +29,10 @@ async function handleLogin(){
       }
     );
 
+    
+
     userStore.setUser(resp.data)
-    router.push("/register")
+    router.push("/")
 
   }catch(err){
 if (err.response && err.response.status === 401) {
@@ -63,7 +65,8 @@ if (err.response && err.response.status === 401) {
       <div class="reg">Chưa có tài khoản? <router-link to="/register" class="fordwardRegister">Đăng ký ngay!</router-link></div>
        <button type="submit">Exit</button>
       <button type="submit">Login</button>
-      
+      <a href="http://localhost:8080/identity/oauth2/authorization/google
+">Login with google</a>
       <div id="login-error">{{ error ? 'Login failed' : '' }}</div>
     </form>
     
@@ -124,9 +127,13 @@ if (err.response && err.response.status === 401) {
       outline: none;
       font-size: 1rem;
     }
-
+    
     .login-form input:hover {
-      border-color: rgb(15, 96, 96);
+      border-color: rgb(188, 23, 100);
+    }
+
+     .login-form input:hover::placeholder{
+        color: red;
     }
 
     .remember {

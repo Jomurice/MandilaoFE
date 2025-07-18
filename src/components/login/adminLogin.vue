@@ -9,12 +9,8 @@ const username = ref('');
 const password = ref('');
 const error = ref('');
 const router = useRouter();
-const isLoading = ref(false);
-
-const userStore = userStorage();
 
 async function handleLogin(){
-  if(isLoading.value) return;
   error.value = '';
   try{
     const resp = await axios.post(
@@ -30,9 +26,7 @@ async function handleLogin(){
         withCredentials: true
       }
     );
-    userStore.setUser(resp.data)
-    router.push("/register")
-
+    
   }catch(err){
 if (err.response && err.response.status === 401) {
         const data = err.response.data;
@@ -41,9 +35,6 @@ if (err.response && err.response.status === 401) {
         error.value = 'Đã xảy ra lỗi, vui lòng thử lại';
     }
   }
-  finally {
-        isLoading.value = false;
-    }
 }
 
 </script>
@@ -61,7 +52,7 @@ if (err.response && err.response.status === 401) {
       
     
       <button type="submit">Login</button>
-      
+
       <div id="login-error">{{ error ? 'Login failed' : '' }}</div>
     </form>
     
@@ -77,8 +68,7 @@ if (err.response && err.response.status === 401) {
       padding: 0;
       margin: 0;
       box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
-      
+      font-family: Arial, Helvetica, sans-serif; 
     }
 
     .label-input{
@@ -124,8 +114,13 @@ if (err.response && err.response.status === 401) {
       font-size: 1rem;
     }
 
+
     .login-form input:hover {
-      border-color: rgb(15, 96, 96);
+      border-color: rgb(201, 74, 71);
+    }
+
+    .login-form input:hover::placeholder{
+        color: red;
     }
 
     .login-form button {

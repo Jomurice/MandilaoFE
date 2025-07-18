@@ -2,19 +2,23 @@
  import { ref } from 'vue'
     import axios from 'axios'
     import { useRouter } from 'vue-router'
-    const username = ref('')
-    const password = ref('')
-    const fullname = ref('')
-    const email = ref('')
-    const err = ref(null)
+    const username = ref('');
+    const password = ref('');
+    const fullname = ref('');
+    const phone = ref('');
+    const dob = ref('');
+    const email = ref('');
+    const err = ref(null);
     const router = useRouter();
 
     async function handleRegister(){
         try{
-            const resp = await axios.post("/api/auth/register",
+            const resp = await axios.post("http://localhost:8080/identity/users",
                 {
                     username: username.value,
                     fullName: fullname.value,
+                    phone: phone.value,
+                    dob: dob.value,
                     email : email.value,
                     password : password.value
                 },
@@ -25,7 +29,10 @@
                     withCredentials: true
                 }
             );
-            router.push("/login")
+            console.log(dob.value)
+            router.push("/login");
+
+
             console.log("Dữ liệu đăng ký " + resp.data);
             
         }catch(e){  
@@ -39,6 +46,8 @@
   <div class="register-form">
     <form @submit.prevent="handleRegister()">
       <h1>Đăng ký</h1>
+      <label for="">Fullname: </label>
+      <input type="text" placeholder="Fullname"  v-model="fullname"/>
       <label for="">Username: </label>
       <input type="text" placeholder="Username"  v-model="username"/>
       <label for="">Email: </label>
@@ -46,16 +55,16 @@
       <label for="">Password: </label>
       <input type="text" placeholder="Password" v-model="password"/>
       <label for="">SDT:</label>
-      <input type="text" placeholder="SDT" />
+      <input type="text" placeholder="SDT"  v-model="phone">
       <label for="">Ngày sinh: </label>
-      <input type="date" placeholder="DATE" id="date-input">
+      <input type="date" placeholder="DATE" id="date-input" v-model="dob">
       <button type="submit">Đăng ký</button>
     </form>
   </div>
 </div>
 </template>
 
-<style>
+<style scoped>
 
   * {
       padding: 0;
@@ -104,6 +113,10 @@
       outline: none;
       font-size: 1rem;
     }
+    .register-form input:hover::placeholder{
+        color: red;
+    }
+
     #date-input{
       margin-bottom: 20px;
       width: 100%;
@@ -120,7 +133,8 @@
     }
 
     .register-form input:hover {
-      border-color: rgb(15, 96, 96);
+      border-color: rgb(233, 37, 119);
+
     }
 
    
