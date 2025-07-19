@@ -16,7 +16,8 @@ const routes =[
     {path:"/register", component: register},
     {path: "/eventPage", component: eventPage},
     {path: "/eventDetail", component: eventDetail},
-    {path:"/profileuser", component: profileUser}
+    {path:"/profileuser", component: profileUser},
+    // {path:"/changePass", name: 'changePass',}
    
 
    
