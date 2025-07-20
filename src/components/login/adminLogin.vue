@@ -77,8 +77,7 @@ if (err.response && err.response.status === 401) {
       padding: 0;
       margin: 0;
       box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
-      
+      font-family: Arial, Helvetica, sans-serif; 
     }
 
     .label-input{
@@ -124,8 +123,13 @@ if (err.response && err.response.status === 401) {
       font-size: 1rem;
     }
 
+
     .login-form input:hover {
-      border-color: rgb(15, 96, 96);
+      border-color: rgb(201, 74, 71);
+    }
+
+    .login-form input:hover::placeholder{
+        color: red;
     }
 
     .login-form button {
