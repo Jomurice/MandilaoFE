@@ -54,11 +54,9 @@ async function handleLogin() {
         withCredentials: true
       }
     );
-    userStore.setUser(resp.data)
-    router.push("/register")
 
-    userStore.setUser(resp.data);
-    router.push("/register");
+    userStore.setUser(resp.data)
+    router.push("/")
   } catch (err) {
     if (err.response && err.response.status === 401) {
       const data = err.response.data;
@@ -106,19 +104,22 @@ async function handleLogin() {
           </label>
         </div>
 
-        <div class="reg">
+        <!-- <div class="reg">
           Chưa có tài khoản?
           <router-link to="/register" class="fordwardRegister"
             >Đăng ký ngay!</router-link
           >
-        </div>
+        </div> -->
 
         <p v-if="error" class="error-message">{{ error }}</p>
 
         
         <button type="submit">Login</button>
+              <a href="http://localhost:8080/identity/oauth2/authorization/google
+">Login with google</a>
       </form>
     </div>
+    
   </div>
 </template>
 
@@ -188,6 +189,24 @@ async function handleLogin() {
 .login-form input:hover::placeholder {
   color: red;
 }
+    .login-form input[type="text"],
+    .login-form input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      border: 1px solid rgb(227, 227, 227);
+      outline: none;
+      font-size: 1rem;
+    }
+    
+    .login-form input:hover {
+      border-color: rgb(188, 23, 100);
+    }
+
+     .login-form input:hover::placeholder{
+        color: red;
+    }
 
 .remember {
   margin-bottom: 15px;

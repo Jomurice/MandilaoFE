@@ -84,14 +84,14 @@ async function handleRegister() {
 
   try {
     const resp = await axios.post(
-      "http://localhost:8080/identity/user",
+      "http://localhost:8080/identity/users",
       {
         username: username.value,
         fullName: fullname.value,
         phone: convertPhoneData,
         dob: dob.value,
         email: email.value,
-        password: password.value,
+        password: password.value
       },
       {
         headers: {
@@ -152,7 +152,7 @@ async function handleRegister() {
 
         <button type="submit">Đăng ký</button>
       </form>
-    </div>
+    </div>  
   </div>
 </template>
 
