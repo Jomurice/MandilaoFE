@@ -11,6 +11,7 @@ const router = useRouter();
 
 const userStore = userStorage();
 
+
 const errors = {
   username: ref(""),
   password: ref(""),
@@ -40,6 +41,7 @@ async function handleLogin() {
 
   error.value = "";
 
+
   try {
     const resp = await axios.post(
       "http://localhost:8080/identity/auth/login",
@@ -62,8 +64,11 @@ async function handleLogin() {
       error.value = `${data.error}: ${data.message}`;
     } else {
       error.value = "Đã xảy ra lỗi, vui lòng thử lại";
+
       // error.value = "Username hoặc Password sai, vui lòng thử lại";
+
     }
+  } finally {
   }
 }
 </script>
@@ -114,6 +119,7 @@ async function handleLogin() {
 
         
         <button type="submit">Login</button>
+
       </form>
     </div>
   </div>
@@ -152,6 +158,7 @@ async function handleLogin() {
   max-width: 400px;
   color: white;
   position: relative;
+
 }
 
 .login-form h1 {
@@ -169,6 +176,7 @@ async function handleLogin() {
   outline: none;
   font-size: 1rem;
 }
+
 
 .error-message {
   font-size: 0.9rem;
@@ -228,6 +236,7 @@ async function handleLogin() {
   display: block;
   text-align: center;
 }
+
 
 .login-form button:hover {
   background-color: rgb(225, 140, 3);
