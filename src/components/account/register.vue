@@ -56,18 +56,19 @@ function validation() {
     isValid = false;
   }
 
-  if (!username.value.trim() || username.value.match(spaceChecher)) {
-    errors.username = "Vui lòng nhập Username hợp lệ";
+  if (!username.value.trim() || username.value.match(regexCheckerSpace)) {
+    errors.username = "Username không dược có khoan";
     isValid = false;
   }
+
 
   if (!phone.value.trim() || !regexPhone.test(phone.value.trim())) {
     errors.phone = "Số điện thoại không hợp lệ";
     isValid = false;
   }
 
-  if (!password.value.trim() || password.value.length < 6 || password.value.match(regexCheckerSpace)) {
-    errors.password = "Mật khẩu ít nhất 6 ký tự";
+  if (!password.value.trim() || password.value.length < 4 || password.value.match(regexCheckerSpace)) {
+    errors.password = "Mật khẩu ít nhất 4 ký tự";
     isValid = false;
   }
 
@@ -176,31 +177,38 @@ html {
   align-items: center;
   width: 100vw;
   height: 100vh;
+  padding: 1rem;
   background-image: url("/img/Background1.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  overflow-y: auto;
+
 }
 
 .register-form {
-  background: rgba(232, 123, 6, 0.8);
+  background: rgba(232, 123, 6, 0.85);
   padding: 2rem;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   width: 100%;
-  max-width: 340px;
+  max-width: 360px;
   color: white;
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .register-form h2 {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
   position: relative;
-  margin-bottom: 35px;
 }
 
 .input-group input {
@@ -213,38 +221,48 @@ html {
 }
 
 .input-group .error-message {
-  position: absolute;
-  bottom: -18px;
-  left: 0;
-  font-size: 0.9rem;
-  color: #ffffff;
-  font-weight:bold;
-  text-decoration:underline;
-  pointer-events: none;
-}
-
-#date-input {
-  background-color: #fdfdfd;
-  color: #333;
+  font-size: 0.85rem;
+  margin-bottom:10px ;
+  color: #fff;
+  font-weight: bold;
+  text-decoration: underline;
 }
 
 .register-form button {
-  display: block;
-  margin: 0 auto;
-  width: 40%;
+  width: 100%;
   padding: 10px;
+  margin-top: 7px ;
   border: none;
   border-radius: 10px;
   font-weight: bold;
-  background-color: rgb(255, 255, 255);
-  color: rgb(108, 108, 108);
+  background-color: #fff;
+  color: #333;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s;
 }
 
 .register-form button:hover {
   background-color: rgb(225, 140, 3);
   color: #fff;
 }
+
+
+@media (max-width: 480px) {
+  .register-form {
+    padding: 1rem;
+    max-width: 100%;
+    font-size: 0.95rem;
+  }
+
+  .input-group input {
+    font-size: 0.9rem;
+  }
+
+  .register-form button {
+    font-size: 0.95rem;
+    padding: 0.75rem;
+  }
+}
 </style>
+
