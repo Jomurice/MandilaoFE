@@ -4,19 +4,30 @@
       <ul class="nav-links">
         <li><router-link to="/" class="nav-item">Home</router-link></li>
         <li><router-link to="/mon-an" class="nav-item">Món ăn</router-link></li>
-        <li><router-link to="/eventPage" class="nav-item">Sự kiện</router-link></li>
+        <li>
+          <router-link to="/eventPage" class="nav-item">Sự kiện</router-link>
+        </li>
+        <li><router-link to="/menu" class="nav-item">Menu</router-link></li>
       </ul>
 
       <div class="logo-container">
         <router-link to="/">
-          <img src="" alt="Logo" class="logo">
+          <img src="" alt="Logo" class="logo" />
         </router-link>
       </div>
 
       <ul class="nav-links right">
-        <li><router-link to="/gioi-thieu" class="nav-item">Giới Thiệu</router-link></li>
-        <li><router-link to="/register" class="nav-item">Đăng Ký</router-link></li>
-        <li><router-link to="/login" class="nav-item">Đăng Nhập</router-link></li>
+        <li>
+          <router-link to="/gioi-thieu" class="nav-item"
+            >Giới Thiệu</router-link
+          >
+        </li>
+        <li>
+          <router-link to="/register" class="nav-item">Đăng Ký</router-link>
+        </li>
+        <li>
+          <router-link to="/login" class="nav-item">Đăng Nhập</router-link>
+        </li>
       </ul>
     </nav>
   </header>
@@ -24,15 +35,14 @@
 
 <script>
 export default {
-  name: 'HeaderUsers',
+  name: "HeaderUsers",
 };
 </script>
 
 <style scoped>
-
 .header-container {
   width: 100vw;
-  background-color: #FFA500;
+  background-color: #ffa500;
   padding: 10px 0;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
@@ -47,7 +57,6 @@ export default {
   padding: 0 20px;
 }
 
-
 .nav-links {
   list-style: none;
   padding: 0;
@@ -56,16 +65,12 @@ export default {
   justify-content: flex-start;
 }
 
-
-
-
 .nav-links li {
   margin: 0 15px;
 }
 
-.nav-links li .nav-item:hover{
- 
-  color:rgb(122, 3, 33);
+.nav-links li .nav-item:hover {
+  color: rgb(122, 3, 33);
 }
 
 .nav-item {
@@ -78,7 +83,6 @@ export default {
 
 .nav-item:hover {
   color: #f0f0f0;
- 
 }
 
 .logo-container {

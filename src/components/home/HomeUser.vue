@@ -1,29 +1,26 @@
 <template>
   <div class="home-user-container">
-    
-
     <!-- Banner -->
     <section class="main-banner">
-      <img src="/img/Background1.jpg" alt="Main Banner" class="banner-image">
+      <img src="/img/Background1.jpg" alt="Main Banner" class="banner-image" />
       <div class="banner-overlay">
         <h1 class="banner-title">Made in Vietnamese.</h1>
         <h2 class="banner-subtitle">Enjoy in restaurant.</h2>
       </div>
-      <div class="carousel-nav left"> &lt; </div>
-      <div class="carousel-nav right"> &gt; </div>
+      <div class="carousel-nav left">&lt;</div>
+      <div class="carousel-nav right">&gt;</div>
     </section>
 
     <!-- <section class=".events-section">
       <EventPage/>
     </section> -->
-     
 
     <!-- Món mới -->
     <section class="new-dishes-section">
       <h2 class="section-title">Món mới</h2>
 
       <div class="dishes-carousel-wrapper">
-        <div class="carousel-nav-small left" @click="prevDish"> &lt; </div>
+        <div class="carousel-nav-small left" @click="prevDish">&lt;</div>
 
         <div class="new-dishes-grid">
           <div v-for="dish in visibleDishes" :key="dish.id" class="dish-card">
@@ -33,11 +30,10 @@
           </div>
         </div>
 
-        <div class="carousel-nav-small right" @click="nextDish"> &gt; </div>
+        <div class="carousel-nav-small right" @click="nextDish">&gt;</div>
       </div>
     </section>
 
-   
     <!-- Footer -->
     <footer class="footer-container">
       <div class="footer-info">
@@ -46,7 +42,7 @@
         <p>Fanpage:</p>
       </div>
       <div class="footer-logo">
-        <img src="" alt="Footer Logo">
+        <img src="" alt="Footer Logo" />
       </div>
       <div class="footer-info">
         <p>Địa chỉ:</p>
@@ -63,36 +59,56 @@
   </div>
 </template>
 
-<script >
-
-
-
-import HeaderUser from '../headers/headerUser.vue';
+<script>
+import HeaderUser from "../headers/headerUser.vue";
 export default {
-  name: 'HomeUser',
+  name: "HomeUser",
   components: { HeaderUser },
   data() {
     return {
       startIndex: 0,
       itemsPerPage: 3,
       events: [
-        { id: 1, title: 'Thành viên mới', price: '249K', image: 'event1.jpg' },
-        { id: 2, title: 'Combo couple', price: '749k', image: 'event2.jpg' },
-        { id: 3, title: 'Summer Sale', price: '299k', image: 'event3.jpg' },
+        { id: 1, title: "Thành viên mới", price: "249K", image: "event1.jpg" },
+        { id: 2, title: "Combo couple", price: "749k", image: "event2.jpg" },
+        { id: 3, title: "Summer Sale", price: "299k", image: "event3.jpg" },
       ],
       newDishes: [
-        { id: 1, name: 'Wagyu Jepang', price: '480.000 VNĐ', image: '/img/p1.jpg' },
-        { id: 2, name: 'Lidah Sapi NZ', price: '118.000 VNĐ', image: '/img/p2.jpg' },
-        { id: 3, name: 'US Angus', price: '198.000 VNĐ', image: '/img/p3.jpg' },
-        { id: 4, name: 'US Angus 2', price: '198.000 VNĐ', image: '/img/p4.jpg' },
-        { id: 5, name: 'US Angus 3', price: '198.000 VNĐ', image: '/img/p5.jpg' },
-      ]
+        {
+          id: 1,
+          name: "Wagyu Jepang",
+          price: "480.000 VNĐ",
+          image: "/img/p1.jpg",
+        },
+        {
+          id: 2,
+          name: "Lidah Sapi NZ",
+          price: "118.000 VNĐ",
+          image: "/img/p2.jpg",
+        },
+        { id: 3, name: "US Angus", price: "198.000 VNĐ", image: "/img/p3.jpg" },
+        {
+          id: 4,
+          name: "US Angus 2",
+          price: "198.000 VNĐ",
+          image: "/img/p4.jpg",
+        },
+        {
+          id: 5,
+          name: "US Angus 3",
+          price: "198.000 VNĐ",
+          image: "/img/p5.jpg",
+        },
+      ],
     };
   },
   computed: {
     visibleDishes() {
-      return this.newDishes.slice(this.startIndex, this.startIndex + this.itemsPerPage);
-    }
+      return this.newDishes.slice(
+        this.startIndex,
+        this.startIndex + this.itemsPerPage
+      );
+    },
   },
   methods: {
     nextDish() {
@@ -106,9 +122,9 @@ export default {
       }
     },
     scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    },
+  },
 };
 </script>
 
@@ -118,7 +134,6 @@ export default {
   height: 100%;
   justify-content: center;
   overflow-x: hidden;
-
 }
 
 .main-banner {
@@ -180,10 +195,18 @@ export default {
   user-select: none;
 }
 
-.carousel-nav.left { left: 20px; }
-.carousel-nav.right { right: 20px; }
-.carousel-nav-small.left { left: 0; }
-.carousel-nav-small.right { right: 0; }
+.carousel-nav.left {
+  left: 20px;
+}
+.carousel-nav.right {
+  right: 20px;
+}
+.carousel-nav-small.left {
+  left: 0;
+}
+.carousel-nav-small.right {
+  right: 0;
+}
 
 .section-title {
   text-align: center;
@@ -249,7 +272,7 @@ export default {
 .event-price {
   font-size: 2.5em;
   font-weight: bold;
-  color: #FFD700;
+  color: #ffd700;
   margin-top: 0;
 }
 
@@ -324,11 +347,11 @@ export default {
 .dish-price {
   font-size: 1.2em;
   font-weight: bold;
-  color: #FFA500;
+  color: #ffa500;
 }
 
 .footer-container {
-  background-color: #FFA500;
+  background-color: #ffa500;
   padding: 30px 20px;
   display: flex;
   justify-content: space-around;
@@ -376,26 +399,50 @@ export default {
 }
 
 @media (max-width: 768px) {
-  .main-banner { height: 300px; }
-  .banner-title { font-size: 2.5em; }
-  .banner-subtitle { font-size: 1.8em; }
-  .events-grid, .new-dishes-grid {
+  .main-banner {
+    height: 300px;
+  }
+  .banner-title {
+    font-size: 2.5em;
+  }
+  .banner-subtitle {
+    font-size: 1.8em;
+  }
+  .events-grid,
+  .new-dishes-grid {
     flex-direction: column;
     align-items: center;
   }
-  .event-card, .dish-card { max-width: 90%; }
-  .section-title { font-size: 2em; text-align: center; }
+  .event-card,
+  .dish-card {
+    max-width: 90%;
+  }
+  .section-title {
+    font-size: 2em;
+    text-align: center;
+  }
   .footer-container {
     flex-direction: column;
     text-align: center;
   }
-  .footer-info, .footer-logo { margin-bottom: 20px; }
+  .footer-info,
+  .footer-logo {
+    margin-bottom: 20px;
+  }
 }
 
 @media (max-width: 480px) {
-  .banner-title { font-size: 2em; }
-  .banner-subtitle { font-size: 1.5em; }
-  .event-title { font-size: 1.8em; }
-  .event-price { font-size: 2em; }
+  .banner-title {
+    font-size: 2em;
+  }
+  .banner-subtitle {
+    font-size: 1.5em;
+  }
+  .event-title {
+    font-size: 1.8em;
+  }
+  .event-price {
+    font-size: 2em;
+  }
 }
 </style>
