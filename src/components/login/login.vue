@@ -28,7 +28,18 @@ async function handleLogin() {
     );
 
     userStore.setUser(resp.data);
-    router.push("/register");
+    // router.push("/register");
+    console.log("Log:", resp.data);
+
+    sessionStorage.setItem("token", resp.data.result.token);
+
+    if (resp.data.result.scope === "ROLE_ADMIN") {
+      router.push("/Admin");
+      alert("Login with Admin successfully!");
+    } else {
+      router.push("/Login");
+      alert("Bạn k thể truy cập trang này");
+    }
   } catch (err) {
     if (err.response && err.response.status === 401) {
       const data = err.response.data;

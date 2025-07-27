@@ -6,69 +6,33 @@
       <SidebarAdmin />
 
       <main class="admin-content">
-        <h2>Products</h2>
-        <div class="search-bar">
-          <input type="text" placeholder="Tìm kiếm" />
-          <button>Tìm</button>
-        </div>
-
-        <table class="product-table">
-          <thead>
-            <tr>
-              <th>Image</th>
-              <th>Tên</th>
-              <th>Giá</th>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(item, index) in products" :key="index">
-              <td><img :src="item.image" class="product-img" /></td>
-              <td>{{ item.name }}</td>
-              <td>{{ item.price }}</td>
-              <td><button class="edit-btn">Sửa</button></td>
-              <td><button class="toggle-btn">Ẩn/hiện</button></td>
-            </tr>
-          </tbody>
-        </table>
+        <router-view />
       </main>
     </div>
   </div>
 </template>
 
-<script>
-import HeaderAdmin from '../headers/HeaderAdmin.vue'
-import SidebarAdmin from '../headers/SidebarAdmin.vue'
+<script setup>
+import { watchEffect } from "vue";
+import { useToast } from "vue-toast-notification";
+import HeaderAdmin from "../headers/HeaderAdmin.vue";
+import SidebarAdmin from "../headers/SidebarAdmin.vue";
+import { useRouter } from "vue-router";
+import Product from "../product/product.vue";
 
-export default {
-  name: 'HomeAdmin',
-  components: {
-    HeaderAdmin,
-    SidebarAdmin
-  },
-  data() {
-    return {
-      products: [
-        {
-          name: 'Bò wagyu',
-          price: '280.000 VNĐ',
-          image: '/img/p4.jpg'
-        },
-        {
-          name: 'Bò shabu',
-          price: '450.000 VNĐ',
-          image: '/img/p6.jpg'
-        },
-        {
-          name: 'Quân',
-          price: '960.000 VNĐ',
-          image: '/img/p5.jpg'
-        }
-      ]
-    }
+const toast = useToast();
+const router = useRouter();
+watchEffect(() => {
+  const roleSession = JSON.parse(sessionStorage.getItem("userLogin"));
+  // console.log(roleSession.result.scope);
+
+  if (!roleSession) {
+    router.push("/Login");
+    toast.success("Vui lòng login với quyền admin để truy cập!");
+  } else if (roleSession.result.scope !== "ROLE_ADMIN") {
+    toast.error("Bạn không có quyền truy cập trang này! Cook.");
   }
-}
+});
 </script>
 
 <style scoped>

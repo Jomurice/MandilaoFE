@@ -1,11 +1,16 @@
 <template>
-  <div class="menu-container">
-    <aside class="category-sidebar">
-      <ul>
+  <div class="min-h-screen w-full flex bg-gray-100">
+    <aside class="w-56 bg-orange-400 p-6 text-white">
+      <ul class="space-y-4">
         <li
           v-for="cat in categories"
           :key="cat.id"
-          :class="{ active: cat.id === selectedCategoryId }"
+          :class="[
+            'cursor-pointer transition duration-200 px-2 py-1 rounded',
+            cat.id === selectedCategoryId
+              ? 'font-bold bg-orange-500 border-l-4 border-white'
+              : 'hover:opacity-80',
+          ]"
           @click="selectCategory(cat.id)"
         >
           {{ cat.name }}
@@ -13,23 +18,36 @@
       </ul>
     </aside>
 
-    <main class="product-list">
-      <div v-if="isLoading">Đang tải dữ liệu...</div>
-      <div v-else-if="errorMessage">{{ errorMessage }}</div>
-      <div v-else>
+    <main class="flex-1 px-6 sm:px-12 py-8">
+      <div
+        class="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4"
+      >
         <div
-          class="product-item"
           v-for="product in filteredProducts"
           :key="product.id"
+          class="bg-white rounded-2xl shadow hover:shadow-lg transition-all p-4 flex flex-col items-center text-center"
         >
           <img
-            :src="getMainImage(product)"
+            :src="getImgUrl(product.images)"
             alt="product"
-            onerror="this.src='https://dummyimage.com/150x150/cccccc/000000&text=No+Image'"
+            class="w-full h-40 object-cover rounded-lg mb-4"
+            @error="
+              (e) =>
+                (e.target.src =
+                  'https://dummyimage.com/150x150/cccccc/000000&text=No+Image')
+            "
           />
-          <p class="product-name">{{ product.name }}</p>
-          <p class="product-price">{{ formatPrice(product.price) }}</p>
-          <button class="add-button">Add</button>
+          <p class="font-semibold text-gray-900 truncate w-full text-base">
+            {{ product.name }}
+          </p>
+          <p class="text-gray-500 mt-1 text-sm">
+            {{ formatPrice(product.price) }}
+          </p>
+          <button
+            class="mt-4 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-full text-sm"
+          >
+            + Add
+          </button>
         </div>
       </div>
     </main>
@@ -39,7 +57,7 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import axios from "axios";
-import { getImgUrl } from "../../assets/utils/imgScript";
+import getImgUrl from "../../assets/utils/imgScript";
 const categories = ref([]);
 const products = ref([]);
 const selectedCategoryId = ref(null);
@@ -53,13 +71,13 @@ const formatPrice = (price) => {
 };
 
 // Lấy ảnh chính từ danh sách ảnh
-const getMainImage = (product) => {
-  const mainImage = product.images?.find((img) => img.isMain);
-  return (
-    mainImage?.url ||
-    "https://dummyimage.com/150x150/cccccc/000000&text=No+Image"
-  );
-};
+// const getMainImage = (product) => {
+//   const mainImage = product.images?.find((img) => img.isMain);
+//   return (
+//     mainImage?.url ||
+//     "https://dummyimage.com/150x150/cccccc/000000&text=No+Image"
+//   );
+// };
 
 // Lọc sản phẩm theo category
 const filteredProducts = computed(() => {
@@ -77,11 +95,13 @@ onMounted(async () => {
   try {
     const loginInfo = JSON.parse(sessionStorage.getItem("userLogin"));
     const token = loginInfo?.result?.token;
-    const headers = { Authorization: `Bearer ${token}` };
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
     const [catRes, prodRes] = await Promise.all([
       axios.get("http://localhost:8080/identity/category", { headers }),
+      // axios.get("http://localhost:8080/identity/category"),
       axios.get("http://localhost:8080/identity/product", { headers }),
+      // axios.get("http://localhost:8080/identity/product"),
     ]);
 
     categories.value = Array.isArray(catRes.data.result)
@@ -103,62 +123,3 @@ onMounted(async () => {
   }
 });
 </script>
-
-<style scoped>
-.menu-container {
-  display: flex;
-  min-height: 100vh;
-}
-
-.category-sidebar {
-  width: 200px;
-  background: orange;
-  padding: 1rem;
-}
-
-.category-sidebar ul {
-  list-style: none;
-  padding: 0;
-}
-
-.category-sidebar li {
-  padding: 10px;
-  cursor: pointer;
-  border-bottom: 1px solid #fff;
-}
-
-.category-sidebar li.active {
-  font-weight: bold;
-  border-left: 4px solid blue;
-}
-
-.product-list {
-  flex: 1;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 1rem;
-  padding: 1rem;
-}
-
-.product-item {
-  background: #f2f2f2;
-  border-radius: 8px;
-  padding: 10px;
-  text-align: center;
-}
-
-.product-item img {
-  width: 100%;
-  height: auto;
-  border-radius: 4px;
-}
-
-.add-button {
-  margin-top: 5px;
-  background-color: #cc5a36;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-</style>
