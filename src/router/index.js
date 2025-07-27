@@ -8,6 +8,7 @@ import HomeAdmin from '../components/home/HomeAdmin.vue';
 import eventPage from "../components/eventPage/eventPage.vue";
 import eventDetail from "../components/eventPage/eventDetail.vue";
 import profileUser from "../components/account/profile-user.vue";
+import AdminTable from '../components/Table/AdminTable.vue'
 const routes =[
     { path: '/', name: 'Home', component: HomeUser },
     { path: '/Admin', name: 'Admin', component: HomeAdmin },
@@ -16,9 +17,8 @@ const routes =[
     {path:"/register", component: register},
     {path: "/eventPage", component: eventPage},
     {path: "/eventDetail", component: eventDetail},
-    {path:"/profileuser", component: profileUser}
-   
-
+    {path:"/profileuser", component: profileUser},
+    { path: '/admin/table', name: 'AdminTable', component: AdminTable }
    
 ]
 
