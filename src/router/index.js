@@ -9,6 +9,8 @@ import eventPage from "../components/eventPage/eventPage.vue";
 import eventDetail from "../components/eventPage/eventDetail.vue";
 import profileUser from "../components/account/profile-user.vue";
 import menu from "../components/menu/menu.vue";
+import productSearch from "../components/menu/product-search.vue";
+import { compile } from "vue";
 const routes = [
   { path: "/", name: "Home", component: HomeUser },
   { path: "/Admin", name: "Admin", component: HomeAdmin },
@@ -19,6 +21,11 @@ const routes = [
   { path: "/eventDetail", component: eventDetail },
   { path: "/profileuser", component: profileUser },
   { path: "/menu", component: menu },
+  {
+  path: '/search',
+  name: 'product-search',
+  component: productSearch
+}
 ];
 
 const router = createRouter({

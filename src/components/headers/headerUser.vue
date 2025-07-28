@@ -4,9 +4,7 @@
       <ul class="nav-links">
         <li><router-link to="/" class="nav-item">Home</router-link></li>
         <li><router-link to="/mon-an" class="nav-item">Món ăn</router-link></li>
-        <li>
-          <router-link to="/eventPage" class="nav-item">Sự kiện</router-link>
-        </li>
+        <li><router-link to="/eventPage" class="nav-item">Sự kiện</router-link></li>
         <li><router-link to="/menu" class="nav-item">Menu</router-link></li>
       </ul>
 
@@ -17,26 +15,55 @@
       </div>
 
       <ul class="nav-links right">
-        <li>
-          <router-link to="/gioi-thieu" class="nav-item"
-            >Giới Thiệu</router-link
-          >
-        </li>
-        <li>
-          <router-link to="/register" class="nav-item">Đăng Ký</router-link>
-        </li>
-        <li>
-          <router-link to="/login" class="nav-item">Đăng Nhập</router-link>
+        <li><router-link to="/gioi-thieu" class="nav-item">Giới Thiệu</router-link></li>
+        <li><router-link to="/register" class="nav-item">Đăng Ký</router-link></li>
+        <li><router-link to="/login" class="nav-item">Đăng Nhập</router-link></li>
+        <li class="search-icon" @click="toggleSearch">
+          🔍
         </li>
       </ul>
     </nav>
+
+  
+    <div v-if="showSearch" class="search-container">
+      <input
+        type="text"
+        v-model="searchQuery"
+        placeholder="Tìm kiếm..."
+        class="search-input"
+        @keyup.enter="submitSearch"
+      />
+      <button>Tìm</button>
+    </div>
   </header>
 </template>
 
 <script>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
 export default {
-  name: "HeaderUsers",
-};
+  name: 'HeaderUsers',
+  setup() {
+    const showSearch = ref(false)
+    const searchQuery = ref('')
+    const router = useRouter()
+
+    const toggleSearch = () => {
+      showSearch.value = !showSearch.value
+    }
+
+    const submitSearch = () => {
+      if (searchQuery.value.trim()) {
+        router.push({ name: 'product-search', query: { q: searchQuery.value } })
+        showSearch.value = false
+        searchQuery.value = ''
+      }
+    }
+
+    return { showSearch, searchQuery, toggleSearch, submitSearch }
+  }
+}
 </script>
 
 <style scoped>
@@ -62,11 +89,13 @@ export default {
   padding: 0;
   margin: 0;
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-start;
 }
 
 .nav-links li {
   margin: 0 15px;
+  cursor: pointer;
 }
 
 .nav-links li .nav-item:hover {
@@ -90,7 +119,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0 20px; /* Thêm khoảng cách hai bên logo */
+  margin: 0 20px;
 }
 
 .logo {
@@ -102,30 +131,74 @@ export default {
   justify-content: flex-end;
 }
 
+
+.search-icon {
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.search-icon:hover {
+  color: #333;
+}
+
+
+.search-container {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  padding: 0 10px;
+}
+
+.search-input {
+  width: 400px;
+  max-width: 100%;
+  padding: 10px 14px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  outline: none;
+}
+
 @media (max-width: 768px) {
   .navbar {
-    flex-wrap: wrap;
-    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 
   .nav-links {
-    width: 100%;
     justify-content: center;
-    margin-top: 10px;
+    flex-wrap: wrap;
   }
 
   .nav-links.right {
-    margin-left: 0;
+    justify-content: center;
   }
 
   .nav-links li {
-    margin: 0 10px;
+    margin: 8px;
   }
 
   .logo-container {
-    order: -1; /* Đẩy logo lên đầu khi ở mobile để dễ nhìn hơn */
+    order: -1;
     width: 100%;
     margin-bottom: 10px;
+  }
+
+  .search-container {
+    padding: 0 10px;
+  }
+
+  .search-input {
+    width: 100%;
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  .search-icon {
+    font-size: 24px;
   }
 }
 </style>
