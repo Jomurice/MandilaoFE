@@ -29,7 +29,7 @@
           />
           <p class="product-name">{{ product.name }}</p>
           <p class="product-price">{{ formatPrice(product.price) }}</p>
-          <button class="add-button">Add</button>
+          <button class="add-button" @click="addToCart(product)">Add</button>
         </div>
       </div>
     </main>
@@ -51,6 +51,25 @@ const formatPrice = (price) => {
   if (price === 0) return "0 VNĐ";
   return price.toLocaleString("vi-VN") + " VNĐ";
 };
+
+const addToCart = (product) =>{
+  const cart =JSON.parse(localStorage.getItem('cart'));
+
+  const existingItem = cart.find(item => item.id === product.id);
+  if(existingItem){
+    existingItem.quantity += 1;
+  }else{
+    cart.push({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: getMainImage(product),
+      quantity: 1
+    });
+  }
+
+  localStorage.setItem('cart', JSON.stringify(cart));
+}
 
 // Lấy ảnh chính từ danh sách ảnh
 const getMainImage = (product) => {
