@@ -9,6 +9,7 @@ import eventPage from "../components/eventPage/eventPage.vue";
 import eventDetail from "../components/eventPage/eventDetail.vue";
 import profileUser from "../components/account/profile-user.vue";
 import menu from "../components/menu/menu.vue";
+import cart from "../components/cart/cart.vue"
 const routes = [
   { path: "/", name: "Home", component: HomeUser },
   { path: "/Admin", name: "Admin", component: HomeAdmin },
@@ -19,6 +20,7 @@ const routes = [
   { path: "/eventDetail", component: eventDetail },
   { path: "/profileuser", component: profileUser },
   { path: "/menu", component: menu },
+  {path: "/cart", component: cart}
 ];
 
 const router = createRouter({
