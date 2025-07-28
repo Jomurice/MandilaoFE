@@ -91,8 +91,8 @@ import axios from "axios";
 import HeaderAdmin from '../headers/HeaderAdmin.vue'
 import SidebarAdmin from '../headers/SidebarAdmin.vue'
 
-// ✅ Gắn token trực tiếp (lấy từ Postman)
-const token = "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJ0aWVuIiwic3ViIjoiYWRtaW4iLCJleHAiOjE3NTM1MDAxOTcsImlhdCI6MTc1MzQ5NjU5Nywic2NvcGUiOiJST0xFX0FETUlOIn0.BZpchagOz1jnkggHZv2Hq0XzyxCMp-0DG_hh3zZ3ZeweSnD0xPHFqzOa-aKOsZqGFO-QneebOTBX8MArrJ_kNA";
+//Gắn token trực tiếp (lấy từ Postman)
+const token = "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJ0aWVuIiwic3ViIjoiYWRtaW4iLCJleHAiOjE3NTM2NzE5ODIsImlhdCI6MTc1MzY2ODM4MiwianRpIjoiZWE1ZGIyMDAtNmJhYy00YWI3LTk5MGQtZjBkYTgzYzc1ZDFhIiwic2NvcGUiOiJST0xFX0FETUlOIn0.iGJ34oUJT1boshoUEtYceij2l56DBVVSGeR1H4tS5XTVYWQjrrXtC1ky5ASQHKmglqATLmDZDXtfCkSiWHn4GQ";
 
 const tables = ref([]);
 const selectedTable = ref(null);
@@ -100,14 +100,14 @@ const showBooking = ref(false);
 const loading = ref(false);
 const error = ref("");
 
-// ✅ Danh sách bàn phân loại
+// Danh sách bàn phân loại
 const vipTables = computed(() => tables.value.filter((t) => t.tableTypeName === "VIP"));
 const standardTables = computed(() =>
   tables.value.filter((t) => t.tableTypeName === "Standard" || t.tableTypeName === "Outdoor")
 );
 
 
-// ✅ Lấy danh sách bàn
+//Lấy danh sách bàn
 async function fetchTables() {
   loading.value = true;
   try {
@@ -125,11 +125,11 @@ async function fetchTables() {
 
 async function updateTable(table) {
   try {
-    // ✅ Token hardcode (tránh lỗi 401)
+   // Token hardcode (tránh lỗi 401)
     const token =
-      "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJ0aWVuIiwic3ViIjoiYWRtaW4iLCJleHAiOjE3NTM1MDAxOTcsImlhdCI6MTc1MzQ5NjU5Nywic2NvcGUiOiJST0xFX0FETUlOIn0.BZpchagOz1jnkggHZv2Hq0XzyxCMp-0DG_hh3zZ3ZeweSnD0xPHFqzOa-aKOsZqGFO-QneebOTBX8MArrJ_kNA";
+      "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJ0aWVuIiwic3ViIjoiYWRtaW4iLCJleHAiOjE3NTM2NzE5ODIsImlhdCI6MTc1MzY2ODM4MiwianRpIjoiZWE1ZGIyMDAtNmJhYy00YWI3LTk5MGQtZjBkYTgzYzc1ZDFhIiwic2NvcGUiOiJST0xFX0FETUlOIn0.iGJ34oUJT1boshoUEtYceij2l56DBVVSGeR1H4tS5XTVYWQjrrXtC1ky5ASQHKmglqATLmDZDXtfCkSiWHn4GQ";
 
-    // ✅ Ánh xạ lại đúng theo DB
+    // Ánh xạ lại đúng theo DB
     let tableTypeId;
     if (table.tableTypeName === "VIP") tableTypeId = 1;
     else if (table.tableTypeName === "Standard") tableTypeId = 2;
