@@ -1,12 +1,12 @@
 <template>
   <header class="header-container">
     <nav class="navbar">
-      <!-- ICON 3 GẠCH -->
+     
       <div class="mobile-menu-icon" @click="toggleMobileMenu">
         ☰
       </div>
 
-      <!-- MENU TRÁI -->
+   
       <ul class="nav-links left" :class="{ show: mobileMenuOpen }">
         <li><router-link to="/" class="nav-item">Home</router-link></li>
         <hr>
@@ -15,27 +15,27 @@
         <li><router-link to="/menu" class="nav-item">Menu</router-link></li>
       </ul>
 
-      <!-- LOGO -->
+   
       <div class="logo-container">
         <router-link to="/">
           <img src="" alt="Logo" class="logo" />
         </router-link>
       </div>
 
-      <!-- MENU PHẢI -->
+  
       <ul class="nav-links right">
         <li><router-link to="/gioi-thieu" class="nav-item">Giới Thiệu</router-link></li>
         <li><router-link to="/register" class="nav-item">Đăng Ký</router-link></li>
         <li><router-link to="/login" class="nav-item">Đăng Nhập</router-link></li>
       </ul>
 
-      <!-- TÌM KIẾM ICON -->
+      
       <div class="search-icon" @click="toggleSearch">
-        🔍
+        <i class="fa-solid fa-magnifying-glass"></i>
       </div>
     </nav>
 
-    <!-- Ô TÌM KIẾM -->
+  
     <div v-if="showSearch" class="search-container">
       <input
         type="text"
@@ -44,7 +44,7 @@
         class="search-input"
         @keyup.enter="submitSearch"
       />
-      <button @click="submitSearch">Tìm</button>
+      <button class="search-button" @click="submitSearch"><i class="fa-solid fa-magnifying-glass"></i></button>
     </div>
   </header>
 </template>
@@ -182,6 +182,25 @@ export default {
   border-radius: 6px;
   outline: none;
 }
+.search-button {
+  background-color: #fff;
+  border: none;
+  padding: 10px 14px;
+  margin-left: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  font-size: 16px;
+  color: #ffa500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.search-button:hover {
+  background-color: #ffa500;
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 
 /* RESPONSIVE CHO MOBILE */
 @media (max-width: 768px) {
