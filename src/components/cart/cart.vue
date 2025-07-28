@@ -2,7 +2,7 @@
 import HeaderUser from '../headers/headerUser.vue';
 import { ref , onMounted} from 'vue';
 import axios from 'axios';
-import HeaderUser from '../headers/headerUser.vue';
+
 
 const note = ref('');
 const err = ref('');
