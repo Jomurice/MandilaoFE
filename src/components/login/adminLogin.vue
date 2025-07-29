@@ -60,9 +60,7 @@ async function handleLogin(){
         withCredentials: true
       }
     );
-    userStore.setUser(resp.data)
-    router.push("/register")
-
+    
   }catch(err){
 if (err.response && err.response.status === 401) {
         const data = err.response.data;
@@ -71,9 +69,6 @@ if (err.response && err.response.status === 401) {
         error.value = 'Đã xảy ra lỗi, vui lòng thử lại';
     }
   }
-  finally {
-        isLoading.value = false;
-    }
 }
 
 </script>

@@ -8,6 +8,8 @@ import HomeAdmin from "../components/home/HomeAdmin.vue";
 import eventPage from "../components/eventPage/eventPage.vue";
 import eventDetail from "../components/eventPage/eventDetail.vue";
 import profileUser from "../components/account/profile-user.vue";
+
+
 import menu from "../components/menu/menu.vue";
 import cart from "../components/cart/cart.vue"
 import productSearch from "../components/menu/product-search.vue";
@@ -27,6 +29,7 @@ const routes = [
 {path: '/search',name: 'product-search',component: productSearch}
 
 ];
+
 
 const router = createRouter({
   history: createWebHistory(),
