@@ -28,7 +28,7 @@ function validation() {
     isValid = false;
   }
 
-  if (!password.value.trim() || password.value.length < 6) {
+  if (!password.value.trim() || password.value.length < 3) {
     errors.password.value = "Mật khẩu ít nhất 6 ký tự";
     isValid = false;
   }

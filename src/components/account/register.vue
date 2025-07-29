@@ -56,7 +56,7 @@ function validation() {
     isValid = false;
   }
 
-  if (!username.value.trim() || username.value.match(spaceChecher)) {
+  if (!username.value.trim() || username.value.match(regexCheckerSpace)) {
     errors.username = "Vui lòng nhập Username hợp lệ";
     isValid = false;
   }
@@ -66,8 +66,8 @@ function validation() {
     isValid = false;
   }
 
-  if (!password.value.trim() || password.value.length < 6 || password.value.match(regexCheckerSpace)) {
-    errors.password = "Mật khẩu ít nhất 6 ký tự";
+  if (!password.value.trim() || password.value.length < 4 || password.value.match(regexCheckerSpace)) {
+    errors.password = "Mật khẩu ít nhất 4 ký tự";
     isValid = false;
   }
 

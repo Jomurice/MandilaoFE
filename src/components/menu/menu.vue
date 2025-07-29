@@ -23,10 +23,11 @@
           :key="product.id"
         >
           <img
-            :src="getMainImage(product)"
-            alt="product"
-            onerror="this.src='https://dummyimage.com/150x150/cccccc/000000&text=No+Image'"
-          />
+          :src="getImgUrl(product.images)"
+          alt="product"
+          onerror="this.src='https://dummyimage.com/150x150/cccccc/000000&text=No+Image'"
+        />
+
           <p class="product-name">{{ product.name }}</p>
           <p class="product-price">{{ formatPrice(product.price) }}</p>
           <button class="add-button">Add</button>
@@ -39,7 +40,7 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import axios from "axios";
-import { getImgUrl } from "../../assets/utils/imgScript";
+import  getImgUrl  from "../../assets/utils/imgScript";
 const categories = ref([]);
 const products = ref([]);
 const selectedCategoryId = ref(null);
@@ -53,13 +54,13 @@ const formatPrice = (price) => {
 };
 
 // Lấy ảnh chính từ danh sách ảnh
-const getMainImage = (product) => {
-  const mainImage = product.images?.find((img) => img.isMain);
-  return (
-    mainImage?.url ||
-    "https://dummyimage.com/150x150/cccccc/000000&text=No+Image"
-  );
-};
+// const getMainImage = (product) => {
+//   const mainImage = product.images?.find((img) => img.isMain);
+//   return (
+//     mainImage?.url ||
+//     "https://dummyimage.com/150x150/cccccc/000000&text=No+Image"
+//   );
+// };
 
 // Lọc sản phẩm theo category
 const filteredProducts = computed(() => {
@@ -75,13 +76,16 @@ const selectCategory = (id) => {
 // Gọi API
 onMounted(async () => {
   try {
-    const loginInfo = JSON.parse(sessionStorage.getItem("userLogin"));
-    const token = loginInfo?.result?.token;
-    const headers = { Authorization: `Bearer ${token}` };
+  const loginInfo = JSON.parse(sessionStorage.getItem("userLogin"));
+  const token = loginInfo?.result?.token;
+  const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
 
     const [catRes, prodRes] = await Promise.all([
       axios.get("http://localhost:8080/identity/category", { headers }),
+      // axios.get("http://localhost:8080/identity/category"),
       axios.get("http://localhost:8080/identity/product", { headers }),
+      // axios.get("http://localhost:8080/identity/product"),
     ]);
 
     categories.value = Array.isArray(catRes.data.result)
