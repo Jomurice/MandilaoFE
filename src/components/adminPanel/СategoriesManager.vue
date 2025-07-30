@@ -48,8 +48,8 @@
     <tbody id="categoryTableBody">
       <tr>
         <td>1</td>
-        <td>Điện thoại</td>
-        <td>Thiết bị di động thông minh</td>
+        <td>Thịt Bò</td>
+        <td>Bò</td>
         <td>
           <button class="btn btn-sm btn-warning me-1">Sửa</button>
           <button class="btn btn-sm btn-danger">Xoá</button>
@@ -57,8 +57,8 @@
       </tr>
       <tr>
         <td>2</td>
-        <td>Máy tính</td>
-        <td>Dùng cho học tập và làm việc</td>
+        <td>Thịt gà</td>
+        <td>gà</td>
         <td>
           <button class="btn btn-sm btn-warning me-1">Sửa</button>
           <button class="btn btn-sm btn-danger">Xoá</button>
