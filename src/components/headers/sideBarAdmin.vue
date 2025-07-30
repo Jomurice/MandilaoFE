@@ -1,7 +1,7 @@
 <template>
   <aside class="sidebar">
     <ul class="sidebar-menu">
-      <li><router-link to="/admin/product">Products</router-link></li> /* ready */
+      <li><router-link to="/admin/product">Products</router-link></li>
        <li><router-link to="/admin/category">Category</router-link></li>
       <li><router-link to="/admin/users">Users</router-link></li>
       <li><router-link to="/admin/orders">Order</router-link></li>
