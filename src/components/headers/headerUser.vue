@@ -70,6 +70,7 @@ export default {
     }
 
     const submitSearch = () => {
+        console.log('Search:', searchQuery.value)
       if (searchQuery.value.trim()) {
         router.push({ name: 'product-search', query: { q: searchQuery.value } })
         showSearch.value = false

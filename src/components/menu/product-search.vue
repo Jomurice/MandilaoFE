@@ -29,33 +29,36 @@ const query = ref(route.query.q || '')
 const results = ref([])
 const loading = ref(false)
 
-const fetchResults = async () => {
-  if (!query.value) return
+    const search = async (keywords, page = 0) => {
+    try {
+        loading.value = true
+        const resp = await axios.post('/api/product/search-and-page-dsl', 
+            {
+                keywords: keywords,
+                page: page
+            }, 
+            {
+                headers: { 
+                    'Content-Type': 'application/json' 
+                },
+                withCredentials: true
+            }
+        )
+        products.value = resp.data.content
+        pageInfo.value = { number: resp.data.number, totalPages: resp.data.totalPages }
+    } catch (e) {
+        console.error('Lỗi khi tìm kiếm:', e)
+    } finally {
+        loading.value = false
+    }
+    }
 
-  loading.value = true
-  try {
-    const res = await axios.get('http://localhost:8080/identity/product/search', {
-      params: { name: query.value }
+
+    onMounted(() => {
+      const query = route.query.q || ''
+      search(keywords)
     })
 
-    results.value = Array.isArray(res.data.result) ? res.data.result : []
-  } catch (err) {
-    console.error('Lỗi khi tìm kiếm:', err)
-    results.value = []
-  } finally {
-    loading.value = false
-  }
-}
-
-watch(
-  () => route.query.q,
-  (newQ) => {
-    query.value = newQ || ''
-    fetchResults()
-  }
-)
-
-onMounted(fetchResults)
 
 const getImage = (product) =>
   product.images?.find((img) => img.isMain)?.url ||

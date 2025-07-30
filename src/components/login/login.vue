@@ -28,12 +28,8 @@ function validation() {
     isValid = false;
   }
 
-<<<<<<< HEAD
-  if (!password.value.trim() || password.value.length < 5) {
-=======
   if (!password.value.trim() || password.value.length < 3) {
->>>>>>> feat_update
-    errors.password.value = "Mật khẩu ít nhất 6 ký tự";
+    errors.password.value = "Mật khẩu ít nhất 3 ký tự";
     isValid = false;
   }
 
