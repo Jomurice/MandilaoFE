@@ -27,10 +27,6 @@ function validation() {
     isValid = false;
   }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> feature/admin-table
   if (!password.value.trim() || password.value.length < 4) {
     errors.password.value = "Mật khẩu ít nhất 4 ký tự";
     isValid = false;
