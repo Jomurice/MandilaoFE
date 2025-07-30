@@ -5,7 +5,9 @@
     <div class="admin-layout">
       <SidebarAdmin />
 
-      <main class="admin-content">
+
+     <RouterView></RouterView>
+      <!-- <main class="admin-content">
         <h2>Products</h2>
         <div class="search-bar">
           <input type="text" placeholder="Tìm kiếm" />
@@ -32,7 +34,7 @@
             </tr>
           </tbody>
         </table>
-      </main>
+      </main> -->
     </div>
   </div>
 </template>

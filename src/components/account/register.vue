@@ -115,7 +115,7 @@ async function handleRegister() {
 </script>
 
 <template>
-  <div class="container">
+  <div class="container-fluid">
     <div class="register-form">
       <form @submit.prevent="handleRegister()">
         <h2>Đăng ký</h2>
@@ -173,13 +173,13 @@ html {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.container {
+.container-fluid {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100vw;
   height: 100vh;
-  padding: 1rem;
+  padding: 2rem;
   background-image: url("/img/Background1.jpg");
   background-size: cover;
   background-position: center;
@@ -191,14 +191,17 @@ html {
 .register-form {
   background: rgba(232, 123, 6, 0.85);
   padding: 2rem;
+
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   width: 100%;
-  max-width: 360px;
+  max-width: 380px;
   color: white;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+margin-left: 1rem;
+margin-right: 1rem;
 }
 
 .register-form h2 {
@@ -210,12 +213,20 @@ html {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  position: relative;
+  position:relative;
 }
 
 .input-group input {
   width: 100%;
-  padding: 10px;
+  padding: 8px;
+  border-radius: 10px;
+ 
+  border: 1px solid gray;
+  outline: none;
+  font-size: 1rem;
+
+  width: 100%;
+  padding: 8px;
   border-radius: 10px;
   border: 1px solid gray;
   outline: none;
@@ -224,7 +235,7 @@ html {
 
 .input-group .error-message {
   font-size: 0.85rem;
-  margin-bottom:10px ;
+  margin-bottom:5px ;
   color: #fff;
   font-weight: bold;
   text-decoration: underline;

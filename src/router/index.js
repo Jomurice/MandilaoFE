@@ -13,7 +13,10 @@ import profileUser from "../components/account/profile-user.vue";
 import menu from "../components/menu/menu.vue";
 import cart from "../components/cart/cart.vue"
 import productSearch from "../components/menu/product-search.vue";
-import { compile } from "vue";
+import ProductManager from "../components/adminPanel/ProductManager.vue";
+import CategoryManager from "../components/adminPanel/СategoriesManager.vue"
+import UsersManager from "../components/adminPanel/UsersManager.vue";
+
 
 const routes = [
   { path: "/", name: "Home", component: HomeUser },
@@ -25,8 +28,32 @@ const routes = [
   { path: "/eventDetail", component: eventDetail },
   { path: "/profileuser", component: profileUser },
   { path: "/menu", component: menu },
-  {path: "/cart", component: cart},
-{path: '/search',name: 'product-search',component: productSearch}
+  { path: "/cart", component: cart},
+  { path: '/search',name: 'product-search',component: productSearch},
+  
+
+
+
+
+  // {path: "/admin/product", name: "productManager", component: ProductManager }
+  {
+  path: '/admin',
+  component: HomeAdmin, 
+  children: [
+    {
+      path: 'product',
+      component: ProductManager
+    },
+    {
+      path:'category',
+      component: CategoryManager
+    },
+    {
+      path:'users',
+      component: UsersManager
+    },
+  ]
+}
 
 ];
 
@@ -37,3 +64,4 @@ const router = createRouter({
 });
 
 export default router;
+
