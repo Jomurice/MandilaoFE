@@ -74,7 +74,7 @@ if (err.response && err.response.status === 401) {
 </script>
 
 <template>
-   <div class="container">
+   <div class="container-fluid">
     <div class="login-form">
       <form @submit.prevent="handleLogin">
         <h1>Đăng nhập</h1>
@@ -122,7 +122,7 @@ if (err.response && err.response.status === 401) {
   padding-bottom: 10px;
 }
 
-.container {
+.container-fluid {
   display: flex;
   justify-content: center;
   align-items: center;

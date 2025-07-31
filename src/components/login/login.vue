@@ -8,7 +8,6 @@ const username = ref("");
 const password = ref("");
 const error = ref("");
 const router = useRouter();
-
 const userStore = userStorage();
 
 
@@ -75,7 +74,7 @@ async function handleLogin() {
 </script>
 
 <template>
-  <div class="container">
+  <div class="container-fluid">
     <div class="login-form">
       <form @submit.prevent="handleLogin">
         <h1>Đăng nhập</h1>
@@ -138,7 +137,7 @@ async function handleLogin() {
   padding-bottom: 10px;
 }
 
-.container {
+.container-fluid {
   display: flex;
   justify-content: center;
   align-items: center;

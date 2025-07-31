@@ -18,7 +18,8 @@
    
       <div class="logo-container">
         <router-link to="/">
-          <img src="" alt="Logo" class="logo" />
+          <img src="/src/assets/pic/logo quan.png" alt="Logo" class="logo">
+
         </router-link>
       </div>
 

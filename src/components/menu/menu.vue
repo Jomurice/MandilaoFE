@@ -103,17 +103,17 @@ onMounted(async () => {
     const [catRes, prodRes] = await Promise.all([
       axios.get("http://localhost:8080/identity/category", { headers }),
       // axios.get("http://localhost:8080/identity/category"),
-      axios.get("http://localhost:8080/identity/product", { headers }),
+      axios.get("http://localhost:8080/identity/product?page=0&size=10&sortBy=name&direction=desc", { headers }),
       // axios.get("http://localhost:8080/identity/product"),
     ]);
 
     categories.value = Array.isArray(catRes.data.result)
       ? catRes.data.result
       : [];
-    products.value = Array.isArray(prodRes.data.result)
-      ? prodRes.data.result
+    products.value = Array.isArray(prodRes.data.result?.content)
+      ? prodRes.data.result?.content
       : [];
-    console.log(prodRes.data.result);
+    console.log(prodRes.data.result.content);
 
     if (categories.value.length > 0) {
       selectedCategoryId.value = categories.value[0].id;
