@@ -13,24 +13,45 @@
       </ul>
     </aside>
 
-    <main class="product-list">
+    <main class="product-section">
       <div v-if="isLoading">Đang tải dữ liệu...</div>
       <div v-else-if="errorMessage">{{ errorMessage }}</div>
       <div v-else>
-        <div
-          class="product-item"
-          v-for="product in filteredProducts"
-          :key="product.id"
-        >
-          <img
-          :src="getImgUrl(product.images)"
-          alt="product"
-          onerror="this.src='https://dummyimage.com/150x150/cccccc/000000&text=No+Image'"
-        />
+        <div class="product-grid">
+          <div
+            class="product-item"
+            v-for="product in filteredProducts"
+            :key="product.id"
+          >
+            <img
+              :src="getImgUrl(product.images)"
+              alt="product"
+              onerror="this.src='https://dummyimage.com/150x150/cccccc/000000&text=No+Image'"
+            />
+            <p class="product-name">{{ product.name }}</p>
+            <p class="product-price">{{ formatPrice(product.price) }}</p>
+            <button class="add-button" @click="addToCart(product)">Add</button>
+          </div>
+        </div>
 
-          <p class="product-name">{{ product.name }}</p>
-          <p class="product-price">{{ formatPrice(product.price) }}</p>
-          <button class="add-button" @click="addToCart(product)">Add</button>
+        <!-- Pagination -->
+        <div class="pagination">
+          <button @click="prevPage" :disabled="currentPage.value <= 1">
+            Prev
+          </button>
+
+          <button
+            v-for="page in totalPages"
+            :key="page"
+            :class="{ active: currentPage.value === page }"
+            @click="goToPage(page)"
+          >
+            {{ page }}
+          </button>
+
+          <button @click="nextPage" :disabled="currentPage.value >= totalPages">
+            Next
+          </button>
         </div>
       </div>
     </main>
@@ -40,48 +61,47 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import axios from "axios";
-import  getImgUrl  from "../../assets/utils/imgScript";
+import getImgUrl from "../../assets/utils/imgScript";
+
 const categories = ref([]);
 const products = ref([]);
 const selectedCategoryId = ref(null);
 const isLoading = ref(true);
 const errorMessage = ref("");
+const currentPage = ref(1);
+const totalPages = ref(1);
 
-// Format tiền
 const formatPrice = (price) => {
-  if (price === 0) return "0 VNĐ";
-  return price.toLocaleString("vi-VN") + " VNĐ";
+  return price === 0 ? "0 VNĐ" : price.toLocaleString("vi-VN") + " VNĐ";
 };
 
-const addToCart = (product) =>{
-  const cart =JSON.parse(localStorage.getItem('cart'));
+const addToCart = (product) => {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const existingItem = cart.find((item) => item.id === product.id);
 
-  const existingItem = cart.find(item => item.id === product.id);
-  if(existingItem){
+  if (existingItem) {
     existingItem.quantity += 1;
-  }else{
+  } else {
     cart.push({
       id: product.id,
       name: product.name,
       price: product.price,
       image: getMainImage(product),
-      quantity: 1
+      quantity: 1,
     });
   }
 
-  localStorage.setItem('cart', JSON.stringify(cart));
-}
+  localStorage.setItem("cart", JSON.stringify(cart));
+};
 
-// Lấy ảnh chính từ danh sách ảnh
-// const getMainImage = (product) => {
-//   const mainImage = product.images?.find((img) => img.isMain);
-//   return (
-//     mainImage?.url ||
-//     "https://dummyimage.com/150x150/cccccc/000000&text=No+Image"
-//   );
-// };
+const getMainImage = (product) => {
+  const mainImage = product.images?.find((img) => img.isMain);
+  return (
+    mainImage?.url ||
+    "https://dummyimage.com/150x150/cccccc/000000&text=No+Image"
+  );
+};
 
-// Lọc sản phẩm theo category
 const filteredProducts = computed(() => {
   return products.value.filter(
     (p) => p.id_category === selectedCategoryId.value
@@ -90,30 +110,74 @@ const filteredProducts = computed(() => {
 
 const selectCategory = (id) => {
   selectedCategoryId.value = id;
+  currentPage.value = 1;
+  loadProduct();
 };
 
-// Gọi API
+const goToPage = async (page) => {
+  currentPage.value = page;
+  await loadProduct();
+};
+
+const nextPage = async () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+    await loadProduct();
+  }
+};
+
+const prevPage = async () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+    await loadProduct();
+  }
+};
+
+const loadProduct = async () => {
+  try {
+    const loginInfo = JSON.parse(sessionStorage.getItem("userLogin"));
+    const token = loginInfo?.result?.token;
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+    const res = await axios.get(
+      `http://localhost:8080/identity/product?page=${currentPage.value}&size=10&sortBy=name&direction=desc`,
+      { headers }
+    );
+
+    products.value = Array.isArray(res.data.result?.content)
+      ? res.data.result.content
+      : [];
+
+    totalPages.value = res.data.result?.totalPages || 1;
+  } catch (error) {
+    console.error("Lỗi khi tải dữ liệu:", error);
+    errorMessage.value = "Không thể tải dữ liệu từ server.";
+  }
+};
+
 onMounted(async () => {
   try {
-  const loginInfo = JSON.parse(sessionStorage.getItem("userLogin"));
-  const token = loginInfo?.result?.token;
-  const headers = token ? { Authorization: `Bearer ${token}` } : {};
-
+    const loginInfo = JSON.parse(sessionStorage.getItem("userLogin"));
+    const token = loginInfo?.result?.token;
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
     const [catRes, prodRes] = await Promise.all([
       axios.get("http://localhost:8080/identity/category", { headers }),
-      // axios.get("http://localhost:8080/identity/category"),
-      axios.get("http://localhost:8080/identity/product?page=0&size=10&sortBy=name&direction=desc", { headers }),
-      // axios.get("http://localhost:8080/identity/product"),
+      axios.get(
+        `http://localhost:8080/identity/product?page=${currentPage.value}&size=10&sortBy=name&direction=desc`,
+        { headers }
+      ),
     ]);
 
     categories.value = Array.isArray(catRes.data.result)
       ? catRes.data.result
       : [];
+
     products.value = Array.isArray(prodRes.data.result?.content)
-      ? prodRes.data.result?.content
+      ? prodRes.data.result.content
       : [];
-    console.log(prodRes.data.result.content);
+
+    totalPages.value = prodRes.data.result?.totalPages || 1;
 
     if (categories.value.length > 0) {
       selectedCategoryId.value = categories.value[0].id;
@@ -142,6 +206,7 @@ onMounted(async () => {
 .category-sidebar ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .category-sidebar li {
@@ -155,12 +220,15 @@ onMounted(async () => {
   border-left: 4px solid blue;
 }
 
-.product-list {
+.product-section {
   flex: 1;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 1rem;
   padding: 1rem;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
 }
 
 .product-item {
@@ -168,12 +236,17 @@ onMounted(async () => {
   border-radius: 8px;
   padding: 10px;
   text-align: center;
+  transition: 0.3s;
 }
 
 .product-item img {
   width: 100%;
   height: auto;
   border-radius: 4px;
+}
+
+.product-name {
+  font-weight: bold;
 }
 
 .add-button {
@@ -183,5 +256,28 @@ onMounted(async () => {
   border: none;
   padding: 5px 10px;
   cursor: pointer;
+}
+
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pagination button {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: 0.2s;
+}
+
+.pagination button.active {
+  background-color: orange;
+  color: white;
+  font-weight: bold;
 }
 </style>
