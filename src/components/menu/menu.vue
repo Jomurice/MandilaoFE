@@ -4,7 +4,7 @@
       <ul>
         <li
           v-for="cat in categories"
-          :key="cat.id"
+          :key="cat.id ?? 'all'"
           :class="{ active: cat.id === selectedCategoryId }"
           @click="selectCategory(cat.id)"
         >
@@ -20,7 +20,7 @@
         <div class="product-grid">
           <div
             class="product-item"
-            v-for="product in filteredProducts"
+            v-for="product in products"
             :key="product.id"
           >
             <img
@@ -36,9 +36,7 @@
 
         <!-- Pagination -->
         <div class="pagination">
-          <button @click="prevPage" :disabled="currentPage.value <= 1">
-            Prev
-          </button>
+          <button @click="prevPage" :disabled="currentPage.value <= 1">Prev</button>
 
           <button
             v-for="page in totalPages"
@@ -59,13 +57,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted } from "vue";
 import axios from "axios";
 import getImgUrl from "../../assets/utils/imgScript";
 
 const categories = ref([]);
 const products = ref([]);
-const selectedCategoryId = ref(null);
+const selectedCategoryId = ref(null); // null = Tất cả
 const isLoading = ref(true);
 const errorMessage = ref("");
 const currentPage = ref(1);
@@ -102,12 +100,6 @@ const getMainImage = (product) => {
   );
 };
 
-const filteredProducts = computed(() => {
-  return products.value.filter(
-    (p) => p.id_category === selectedCategoryId.value
-  );
-});
-
 const selectCategory = (id) => {
   selectedCategoryId.value = id;
   currentPage.value = 1;
@@ -135,14 +127,19 @@ const prevPage = async () => {
 
 const loadProduct = async () => {
   try {
+    isLoading.value = true;
+
     const loginInfo = JSON.parse(sessionStorage.getItem("userLogin"));
     const token = loginInfo?.result?.token;
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-    const res = await axios.get(
-      `http://localhost:8080/identity/product?page=${currentPage.value}&size=10&sortBy=name&direction=desc`,
-      { headers }
-    );
+    let url = `http://localhost:8080/identity/product?page=${currentPage.value}&size=10&sortBy=name&direction=desc`;
+
+    if (selectedCategoryId.value !== null) {
+      url += `&categoryId=${selectedCategoryId.value}`;
+    }
+
+    const res = await axios.get(url, { headers });
 
     products.value = Array.isArray(res.data.result?.content)
       ? res.data.result.content
@@ -152,6 +149,8 @@ const loadProduct = async () => {
   } catch (error) {
     console.error("Lỗi khi tải dữ liệu:", error);
     errorMessage.value = "Không thể tải dữ liệu từ server.";
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -169,9 +168,10 @@ onMounted(async () => {
       ),
     ]);
 
-    categories.value = Array.isArray(catRes.data.result)
-      ? catRes.data.result
-      : [];
+    categories.value = [
+      { id: null, name: "Tất cả" }, 
+      ...(Array.isArray(catRes.data.result) ? catRes.data.result : []),
+    ];
 
     products.value = Array.isArray(prodRes.data.result?.content)
       ? prodRes.data.result.content
@@ -179,9 +179,7 @@ onMounted(async () => {
 
     totalPages.value = prodRes.data.result?.totalPages || 1;
 
-    if (categories.value.length > 0) {
-      selectedCategoryId.value = categories.value[0].id;
-    }
+    selectedCategoryId.value = null;
   } catch (err) {
     console.error("Lỗi khi tải dữ liệu:", err);
     errorMessage.value = "Không thể tải dữ liệu từ server.";
