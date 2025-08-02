@@ -25,9 +25,25 @@
 
   
       <ul class="nav-links right">
-        <li><router-link to="/gioi-thieu" class="nav-item">Giới Thiệu</router-link></li>
-        <li><router-link to="/register" class="nav-item">Đăng Ký</router-link></li>
-        <li><router-link to="/login" class="nav-item">Đăng Nhập</router-link></li>
+        <div class="" v-if="userStore?.isLoggedIn">
+          <li class="nav-item dropdown">
+            <button
+              class="btn btn-dark dropdown-toggle avatar"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+            <i class="bi bi-person"></i> {{ fullName  }}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-dark">
+              <li><RouterLink to ="/my-info" class="dropdown-item" href="#">Trang cá nhân</RouterLink></li>
+              <li><button @click="logout" class="dropdown-item" href="#">Đăng xuất</button></li>
+            </ul>
+          </li>
+        </div>
+        <div class="" v-else>
+          <li><router-link to="/register" class="nav-item">Đăng Ký</router-link></li>
+          <li><router-link to="/login" class="nav-item">Đăng Nhập</router-link></li>
+        </div>
       </ul>
 
       
@@ -51,8 +67,9 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '../store/user'
 
 export default {
   name: 'HeaderUsers',
@@ -61,6 +78,14 @@ export default {
     const searchQuery = ref('')
     const mobileMenuOpen = ref(false)
     const router = useRouter()
+    
+    const userStore = useUserStore()
+
+    const logout = () => {
+      userStore.clearUser()
+    }
+
+    const fullName = computed(() => userStore.fullName)
 
     const toggleSearch = () => {
       showSearch.value = !showSearch.value
@@ -85,7 +110,10 @@ export default {
       mobileMenuOpen,
       toggleSearch,
       toggleMobileMenu,
-      submitSearch
+      submitSearch,
+      logout,
+      fullName,
+      userStore,
     }
   }
 }

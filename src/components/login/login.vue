@@ -2,13 +2,13 @@
 import { ref } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
-import { userStorage } from "../store/user";
+import { useUserStore } from "../store/user";
 
 const username = ref("");
 const password = ref("");
 const error = ref("");
 const router = useRouter();
-const userStore = userStorage();
+const userStore = useUserStore();
 
 
 const errors = {
@@ -34,12 +34,10 @@ function validation() {
 
   return isValid;
 }
-
 async function handleLogin() {
   if (!validation()) return;
 
   error.value = "";
-
 
   try {
     const resp = await axios.post(
@@ -50,27 +48,37 @@ async function handleLogin() {
       },
       {
         headers: {
-           'Content-Type': 'application/json'
-        },
-        withCredentials: true
+          'Content-Type': 'application/json'
+        }
       }
     );
 
-    userStore.setUser(resp.data)
-    router.push("/")
+    const token = resp.data.result.token; // 👉 Phải đặt token trước
+    await userStore.login({ token });     // 👉 Sau đó mới gọi login
+
+    // Gọi API lấy thông tin user, kèm Authorization header
+    const profileResponse = await axios.get(
+      'http://localhost:8080/identity/users/my-info',
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      }
+    );
+
+    userStore.setUser(profileResponse.data.result);
+
+    router.push("/");
   } catch (err) {
     if (err.response && err.response.status === 401) {
       const data = err.response.data;
       error.value = `${data.error}: ${data.message}`;
     } else {
       error.value = "Đã xảy ra lỗi, vui lòng thử lại";
-
-      // error.value = "Username hoặc Password sai, vui lòng thử lại";
-
     }
-  } finally {
   }
 }
+
 </script>
 
 <template>
