@@ -101,11 +101,12 @@ async function handleLogin() {
           {{ errors.password.value }}
         </p>
 
-        <div class="remember">
-          <label>
+        <div class="option-row">
+          <label class="remember">
+            <input type="checkbox" />
             Remember me?
-            <input type="checkbox" id="remember" />
           </label>
+          <router-link to="/forgot-Password" class="forgotpass">Forgot Password</router-link>
         </div>
 
         <!-- <div class="reg">
@@ -212,14 +213,27 @@ async function handleLogin() {
         color: red;
     }
 
-.remember {
+.option-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; 
   margin-bottom: 15px;
-  font-size: 0.9rem;
 }
 
-.remember input {
-  margin-right: 7px;
-  cursor: pointer;
+.remember {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: white;
+  gap: 6px; 
+  white-space: nowrap; 
+}
+
+.forgotpass {
+  color: blue;
+  font-size: 0.9rem;
+  text-decoration: none;
 }
 
 .reg {
