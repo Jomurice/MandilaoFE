@@ -1,4 +1,51 @@
 <script setup>
+import { onMounted, onUpdated, ref } from 'vue';
+import axios from 'axios';
+
+const errorMessage = ref("");
+const isLoading = ref(true);
+const categoryList = ref([]);
+ const formCategory = ref({
+  name: "",
+  description: "",
+});
+
+async function loadCategories () {
+  try {
+    const response = await axios.get('http://localhost:8080/identity/category')
+    categoryList.value = response.data.result;
+    console.log(response.data)
+  } catch (error) {
+    console.log("error load categories: " +error)
+    errorMessage.value = "Không load được data từ server.";
+  }finally{
+    isLoading.value = false;
+  }
+
+}
+
+
+async function createCategory(){
+  try {
+    const loginInfo = JSON.parse(sessionStorage.getItem("userLogin"));
+    const token = loginInfo?.result?.token;
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    const response = await axios.post('http://localhost:8080/identity/category',
+    {
+      name: formCategory.value.name,
+      description: formCategory.value.description
+    },
+    {headers});
+    console.log("Category created successfully: "+response.data)
+    loadCategories();
+  } catch (error) {
+    
+  }
+  
+}
+
+
+onMounted(loadCategories)
 </script>
 
 <template>
@@ -14,7 +61,9 @@
           id="name"
           name="name"
           placeholder="Nhập tên loại"
+
           required
+          v-model="formCategory.name"
         />
       </div>
 
@@ -26,15 +75,16 @@
           name="description"
           rows="2"
           placeholder="Nhập mô tả (nếu có)"
+          v-model="formCategory.description"
         ></textarea>
       </div>
 
-      <button type="submit" class="btn btn-sm btn-orange mt-3">Tạo loại sản phẩm</button>
+      <button type="button" class="btn btn-sm btn-orange mt-3" @click="createCategory()">Tạo loại sản phẩm</button>
     </form>
   </div>
 </div>
 
-<div class="container mt-4 table-box">
+<div  class="container mt-4 table-box">
   <h2 class="mb-4 text-orange fw-bold">Danh sách loại sản phẩm</h2>
   <table class="table table-bordered table-hover table-striped align-middle">
     <thead class="table-orange text-white">
@@ -46,24 +96,16 @@
       </tr>
     </thead>
     <tbody id="categoryTableBody">
-      <tr>
-        <td>1</td>
-        <td>Thịt Bò</td>
-        <td>Bò</td>
+      <tr v-for="(category,index) in categoryList">
+        <td>{{ index+1 }}</td>
+        <td>{{ category.name }}</td>
+        <td>{{ category.description }}</td>
         <td>
           <button class="btn btn-sm btn-warning me-1">Sửa</button>
           <button class="btn btn-sm btn-danger">Xoá</button>
         </td>
       </tr>
-      <tr>
-        <td>2</td>
-        <td>Thịt gà</td>
-        <td>gà</td>
-        <td>
-          <button class="btn btn-sm btn-warning me-1">Sửa</button>
-          <button class="btn btn-sm btn-danger">Xoá</button>
-        </td>
-      </tr>
+      
     </tbody>
   </table>
 </div>

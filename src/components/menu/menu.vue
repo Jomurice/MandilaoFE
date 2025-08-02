@@ -34,10 +34,8 @@
           </div>
         </div>
 
-        <!-- Pagination -->
         <div class="pagination">
           <button @click="prevPage" :disabled="currentPage.value <= 1">Prev</button>
-
           <button
             v-for="page in totalPages"
             :key="page"
@@ -46,10 +44,7 @@
           >
             {{ page }}
           </button>
-
-          <button @click="nextPage" :disabled="currentPage.value >= totalPages">
-            Next
-          </button>
+          <button @click="nextPage" :disabled="currentPage.value >= totalPages">Next</button>
         </div>
       </div>
     </main>
@@ -63,14 +58,19 @@ import getImgUrl from "../../assets/utils/imgScript";
 
 const categories = ref([]);
 const products = ref([]);
-const selectedCategoryId = ref(null); // null = Tất cả
+const selectedCategoryId = ref(null);
 const isLoading = ref(true);
 const errorMessage = ref("");
 const currentPage = ref(1);
 const totalPages = ref(1);
+const pageSize = 12;
 
-const formatPrice = (price) => {
-  return price === 0 ? "0 VNĐ" : price.toLocaleString("vi-VN") + " VNĐ";
+const formatPrice = (price) =>
+  price === 0 ? "0 VNĐ" : price.toLocaleString("vi-VN") + " VNĐ";
+
+const getMainImage = (product) => {
+  const mainImage = product.images?.find((img) => img.isMain);
+  return mainImage?.url || "https://dummyimage.com/150x150/cccccc/000000&text=No+Image";
 };
 
 const addToCart = (product) => {
@@ -92,48 +92,41 @@ const addToCart = (product) => {
   localStorage.setItem("cart", JSON.stringify(cart));
 };
 
-const getMainImage = (product) => {
-  const mainImage = product.images?.find((img) => img.isMain);
-  return (
-    mainImage?.url ||
-    "https://dummyimage.com/150x150/cccccc/000000&text=No+Image"
-  );
-};
-
 const selectCategory = (id) => {
   selectedCategoryId.value = id;
   currentPage.value = 1;
-  loadProduct();
+  loadProducts();
 };
 
-const goToPage = async (page) => {
+const goToPage = (page) => {
   currentPage.value = page;
-  await loadProduct();
+  loadProducts();
 };
 
-const nextPage = async () => {
+const nextPage = () => {
   if (currentPage.value < totalPages.value) {
     currentPage.value++;
-    await loadProduct();
+    loadProducts();
   }
 };
 
-const prevPage = async () => {
+const prevPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--;
-    await loadProduct();
+    loadProducts();
   }
 };
 
-const loadProduct = async () => {
+const loadProducts = async () => {
   try {
     isLoading.value = true;
+    errorMessage.value = "";
 
     const loginInfo = JSON.parse(sessionStorage.getItem("userLogin"));
     const token = loginInfo?.result?.token;
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-    let url = `http://localhost:8080/identity/product?page=${currentPage.value}&size=10&sortBy=name&direction=desc`;
+    let url = `http://localhost:8080/identity/product?page=${currentPage.value - 1}&size=${pageSize}&sortBy=name&direction=desc`;
 
     if (selectedCategoryId.value !== null) {
       url += `&categoryId=${selectedCategoryId.value}`;
@@ -147,7 +140,7 @@ const loadProduct = async () => {
 
     totalPages.value = res.data.result?.totalPages || 1;
   } catch (error) {
-    console.error("Lỗi khi tải dữ liệu:", error);
+    console.error("error load product", error);
     errorMessage.value = "Không thể tải dữ liệu từ server.";
   } finally {
     isLoading.value = false;
@@ -156,32 +149,23 @@ const loadProduct = async () => {
 
 onMounted(async () => {
   try {
+    isLoading.value = true;
     const loginInfo = JSON.parse(sessionStorage.getItem("userLogin"));
     const token = loginInfo?.result?.token;
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-    const [catRes, prodRes] = await Promise.all([
-      axios.get("http://localhost:8080/identity/category", { headers }),
-      axios.get(
-        `http://localhost:8080/identity/product?page=${currentPage.value}&size=10&sortBy=name&direction=desc`,
-        { headers }
-      ),
-    ]);
+    const catRes = await axios.get("http://localhost:8080/identity/category", {
+      headers,
+    });
 
     categories.value = [
-      { id: null, name: "Tất cả" }, 
+      { id: null, name: "Tất cả" },
       ...(Array.isArray(catRes.data.result) ? catRes.data.result : []),
     ];
 
-    products.value = Array.isArray(prodRes.data.result?.content)
-      ? prodRes.data.result.content
-      : [];
-
-    totalPages.value = prodRes.data.result?.totalPages || 1;
-
-    selectedCategoryId.value = null;
-  } catch (err) {
-    console.error("Lỗi khi tải dữ liệu:", err);
+    await loadProducts();
+  } catch (error) {
+    console.error("Ошибка при загрузке категорий:", error);
     errorMessage.value = "Không thể tải dữ liệu từ server.";
   } finally {
     isLoading.value = false;
@@ -238,9 +222,12 @@ onMounted(async () => {
 }
 
 .product-item img {
-  width: 100%;
-  height: auto;
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
   border-radius: 4px;
+  display: block;
+  margin: 0 auto;
 }
 
 .product-name {
@@ -254,6 +241,10 @@ onMounted(async () => {
   border: none;
   padding: 5px 10px;
   cursor: pointer;
+}
+.add-button:hover {
+  background-color: #fcb900;
+  zoom: 1;
 }
 
 .pagination {
