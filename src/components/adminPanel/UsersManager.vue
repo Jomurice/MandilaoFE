@@ -25,7 +25,7 @@
         <td>0123456789</td>
         <td>03-04-2005</td>
         <td>Trung Dũng</td>
-        <td> USER</td>
+        <td>USER</td>
       </tr>
     </tbody>
   </table>
