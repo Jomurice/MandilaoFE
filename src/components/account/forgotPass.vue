@@ -3,19 +3,17 @@
     <div class="form-box">
       <h1>Quên mật khẩu</h1>
 
-      <!-- Email input -->
       <div>
         <label for="email">Email:</label>
         <input v-model="email" type="email" placeholder="Nhập email" required>
       </div>
 
-      <!-- OTP input -->
+
       <div v-if="showOtpBox">
         <label for="otp">Mã OTP:</label>
         <input v-model="otp" type="text" placeholder="Nhập mã OTP">
       </div>
 
-      <!-- Buttons -->
       <div class="button-group">
         <!-- <button class="btn exit" @click="exit">Exit</button> -->
 
