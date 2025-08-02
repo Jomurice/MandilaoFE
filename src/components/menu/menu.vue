@@ -165,7 +165,7 @@ onMounted(async () => {
 
     await loadProducts();
   } catch (error) {
-    console.error("Ошибка при загрузке категорий:", error);
+    console.error("error load category: ", error);
     errorMessage.value = "Không thể tải dữ liệu từ server.";
   } finally {
     isLoading.value = false;
