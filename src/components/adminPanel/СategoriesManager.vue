@@ -5,10 +5,11 @@ import axios from 'axios';
 const errorMessage = ref("");
 const isLoading = ref(true);
 const categoryList = ref([]);
- const formCategory = ref({
+const formCategory = ref({
   name: "",
   description: "",
 });
+const currentEdit = ref(null);
 
 async function loadCategories () {
   try {
@@ -16,14 +17,13 @@ async function loadCategories () {
     categoryList.value = response.data.result;
     console.log(response.data)
   } catch (error) {
-    console.log("error load categories: " +error)
+    console.log("error load categories: "+error)
     errorMessage.value = "Không load được data từ server.";
   }finally{
     isLoading.value = false;
   }
 
 }
-
 
 async function createCategory(){
   try {
@@ -39,11 +39,49 @@ async function createCategory(){
     console.log("Category created successfully: "+response.data)
     loadCategories();
   } catch (error) {
-    
-  }
-  
+  } 
 }
 
+function getIdForUpdate(id){
+  const category = categoryList.value.find(c => c.id ===id);
+  console.log(category);
+  if(category){
+    currentEdit.value = id;
+    formCategory.value.name = category.name;
+    formCategory.value.description = category.description;
+  }
+
+}
+
+
+async function updateCategory(){
+  const loginInfo = JSON.parse(sessionStorage.getItem("userLogin"));
+    const token = loginInfo?.result?.token;
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+  try {
+    let url = "http://localhost:8080/identity/category";
+    if(currentEdit != null){
+      url += `/${currentEdit.value}`
+    }
+     console.log("Отправляем:", {
+      name: formCategory.value.name,
+      description: formCategory.value.description
+    });
+    const response = await axios.put(url,
+    {
+      name: formCategory.value.name,
+      description: formCategory.value.description,
+      
+    },
+    {
+      headers
+    }
+  );
+  loadCategories();
+  } catch (error) {
+    console.log("error update Category: ", error)
+  }
+}
 
 onMounted(loadCategories)
 </script>
@@ -79,7 +117,8 @@ onMounted(loadCategories)
         ></textarea>
       </div>
 
-      <button type="button" class="btn btn-sm btn-orange mt-3" @click="createCategory()">Tạo loại sản phẩm</button>
+      <button type="button" class="btn btn-sm btn-orange mt-3 padding 5px" @click="createCategory()">Tạo</button>
+      <button type="button" class="btn btn-sm btn-orange mt-3" v-on:click="updateCategory()">Cập nhật</button>
     </form>
   </div>
 </div>
@@ -101,7 +140,7 @@ onMounted(loadCategories)
         <td>{{ category.name }}</td>
         <td>{{ category.description }}</td>
         <td>
-          <button class="btn btn-sm btn-warning me-1">Sửa</button>
+          <button class="btn btn-sm btn-warning me-1" @click="getIdForUpdate(category.id)">Sửa</button>
           <button class="btn btn-sm btn-danger">Xoá</button>
         </td>
       </tr>
