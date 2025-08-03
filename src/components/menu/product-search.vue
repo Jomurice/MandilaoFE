@@ -10,7 +10,7 @@
 
     <div v-else class="product-grid">
       <div class="product" v-for="product in results" :key="product.id">
-        <img :src="getImage(product)" alt="Product" @error="setDefaultImage" />
+        <img :src="getImgUrl(product.images)" alt="Product" @error="setDefaultImage" />
         <p class="product-name">{{ product.name }}</p>
         <p class="product-price">{{ formatPrice(product.price) }}</p>
         <button class="add-button">Add</button>
@@ -23,7 +23,7 @@
 import { ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
-
+import getImgUrl from "../../assets/utils/imgScript";
 const route = useRoute()
 const query = ref(route.query.q || '')
 const results = ref([])
