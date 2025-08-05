@@ -1,8 +1,7 @@
 <script setup>
-import HeaderUser from '../headers/headerUser.vue';
+import headerUser from '../headers/headerUser.vue';
 import { ref , onMounted} from 'vue';
 import axios from 'axios';
-import HeaderUser from '../headers/headerUser.vue';
 
 const note = ref('');
 const err = ref('');
@@ -18,9 +17,9 @@ onMounted( fill = () =>{
     cartItems.value = storeCart;
 })
 
-const upq = item => item.quantity++;updateLocalStorage();
+const upq = item => item.quantity++;
 const downq = item =>{
-    if(item.quantity >1 )item.quantity--;updateLocalStorage();
+    if(item.quantity >1 )item.quantity--;
 }
 
 const updateLocalStorage = () =>{localStorage.setItem('cart',JSON.stringify(cartItems.value))}
@@ -59,7 +58,7 @@ const placeCart = () =>{
 
 <template>
     <div>
-      <HeaderUser/>
+      <headerUser/>
     </div>
     <div class="content">
         <div class="left">

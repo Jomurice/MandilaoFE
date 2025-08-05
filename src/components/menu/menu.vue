@@ -94,13 +94,13 @@ const selectCategory = (id) => {
 // Gọi API
 onMounted(async () => {
   try {
-    const loginInfo = JSON.parse(sessionStorage.getItem("userLogin"));
-    const token = loginInfo?.result?.token;
-    const headers = { Authorization: `Bearer ${token}` };
+    // const loginInfo = JSON.parse(sessionStorage.getItem("userLogin"));
+    // const token = loginInfo?.result?.token;
+    // const headers = { Authorization: `Bearer ${token}` };
 
     const [catRes, prodRes] = await Promise.all([
-      axios.get("http://localhost:8080/identity/category", { headers }),
-      axios.get("http://localhost:8080/identity/product", { headers }),
+      axios.get("http://localhost:8080/identity/category"),
+      axios.get("http://localhost:8080/identity/product"),
     ]);
 
     categories.value = Array.isArray(catRes.data.result)
