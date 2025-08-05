@@ -1,5 +1,4 @@
 <script setup>
-import HeaderUser from '../headers/headerUser.vue';
 import { ref , onMounted} from 'vue';
 import axios from 'axios';
 
@@ -7,60 +6,74 @@ import axios from 'axios';
 const note = ref('');
 const err = ref('');
 const cartItems = ref([]);
-const msg = ref('')
+const msg = ref('');
 
-onMounted( fill = () =>{
-    // const loginInfo = JSON.parse(sessionStorage.getItem("userLogin"));
-    // const token = loginInfo?.result?.token;
-    // const headers = { Authorization: `Bearer ${token}` };
-    
-    const storeCart = JSON.parse(localStorage.getItem('cart') || []);
-    cartItems.value = storeCart;
-})
+function load() {
+  try {
+    cartItems.value = JSON.parse(localStorage.getItem('cart') || '[]');
+  } catch (e) {
+    cartItems.value = [];
+    console.error("Lỗi khi parse cart từ localStorage:", e);
+  }
+}
 
-const upq = item => item.quantity++;updateLocalStorage();
+
+const upq = item => item.quantity++;
 const downq = item =>{
-    if(item.quantity >1 )item.quantity--;updateLocalStorage();
+    if(item.quantity >1 )item.quantity--; 
 }
 
 const updateLocalStorage = () =>{localStorage.setItem('cart',JSON.stringify(cartItems.value))}
 
 const formatPrice = price => price.toLocaleString('vi-VN') + ' VNĐ'
 
-const placeCart = () =>{
-    const validItems = cartItems.value.filter(item => item.quantity > 0)
-    if(validItems.length === 0) {
-        err.value = 'Phải chọn ít nhất 1 món';
-        return;
-    }
+async function placeCart(cartItems) {
+  // const validItems = cartItems.value.filter(item => item.quantity > 0);
+  // if (validItems.length === 0) {
+  //   err.value = 'Phải chọn ít nhất 1 món';
+  //   return;
+  // }
 
-    const cart = {
-        items: validItems.map(item=>({
-            id: item.id,
-            name:item.name,
-            quantity:item.quantity,
-            totalPrice: item.totalPrice
-        })),
-        note: note.value
-    }
-    // ham nay test lai nhe a 
-    // try{
-    //     await axios.post('/order',cart)
-    //     msg = 'Success'
-    //    localStorage.removeItem('cart')
-    // }catch(e){
-    //     console.error("Error send cart",e)
-    //     err.value = 'Lỗi gọi món'
-    // }
+  // const id_table = localStorage.getItem("table"); 
+
+  // if (!id_table) {
+  //   err.value = 'Không xác định được bàn, vui lòng quét mã QR';
+  //   return;
+  // }
+
+  const cart = {
+  // id_user: null,  
+  id_table: 1,
+  orderDetaiList: cartItems.map(item => ({
+    id_product: item.id,
+    quantity: item.quantity
+  }))
+};
+
+  try {
+    const url = "http://localhost:8080/identity/order/call";
+    await axios.post(url, cart, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    msg.value = 'Đặt món thành công!';
+    localStorage.removeItem('cart');
+    console.log("Gọi món thành công");
+    load()
+  } catch (e) {
+    console.error("Lỗi gửi cart", e);
+    err.value = 'Lỗi gọi món';
+  }
 }
 
+onMounted(() =>{
+  load();
+});
 
 </script>
 
 <template>
-    <div>
-      <HeaderUser/>
-    </div>
     <div class="content">
         <div class="left">
             <div v-for="item in cartItems" :key="item.id" class="cart-item">
@@ -79,7 +92,7 @@ const placeCart = () =>{
 
         <div class="right">
             <textarea placeholder="Ghi chú" v-model="note"></textarea>
-            <button>Gọi món</button>
+            <button @click="placeCart(cartItems)">Gọi món</button>
         </div>
     </div>
 

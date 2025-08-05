@@ -57,7 +57,7 @@ import { useRouter } from 'vue-router';
 
     async function resendOtp() {
         try {
-             const resp = await axios.post('http://localhost:8080/identity/auth/forgot-password', { email: email.value });
+             const resp = await axios.post('http://localhost:8080/identity/auth/forgot-password', { email:email.value });
             alert(`Đã gửi lại OTP đến ${email.value}`)
         } catch (error) {
             alert('Lỗi gửi OTP !')
@@ -69,9 +69,8 @@ import { useRouter } from 'vue-router';
             alert('Vui lòng nhập mã OTP !')
             return;
         }
-
         try {
-            const resp = await axios.post('http://localhost:8080/identity/auth/verify-otp', {otp: otp.value })
+            const resp = await axios.post('http://localhost:8080/identity/auth/verify-otp', {otp:otp.value })
             router.push('/changePass')
         } catch (error) {
             alert('Mã OTP không đúng hoặc đã hết hạn !')
