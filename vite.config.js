@@ -9,8 +9,12 @@ export default defineConfig({
     //   '/api': {
     //     target: 'http://localhost:8080', // địa chỉ backend Spring Boot
     //     changeOrigin: true,
+
+    //     secure: false, // chỉ dùng dev local, không được dùng trong production deploy.
+    //     rewrite: path => path.replace(/^\/api/, ''), // <- Quan trọng!
     //     secure: false // chỉ dùng dev local, không được dùng trong production deploy.
     //   }
     // }
+
   }
 })

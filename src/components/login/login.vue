@@ -8,7 +8,6 @@ const username = ref("");
 const password = ref("");
 const error = ref("");
 const router = useRouter();
-
 const userStore = userStorage();
 
 
@@ -28,8 +27,8 @@ function validation() {
     isValid = false;
   }
 
-  if (!password.value.trim() || password.value.length < 6) {
-    errors.password.value = "Mật khẩu ít nhất 6 ký tự";
+  if (!password.value.trim() || password.value.length < 3) {
+    errors.password.value = "Mật khẩu ít nhất 3 ký tự";
     isValid = false;
   }
 
@@ -51,13 +50,14 @@ async function handleLogin() {
       },
       {
         headers: {
-          "Content-Type": "application/json",
+           'Content-Type': 'application/json'
         },
+        withCredentials: true
       }
     );
 
-    userStore.setUser(resp.data);
-    router.push("/register");
+    userStore.setUser(resp.data)
+    router.push("/")
   } catch (err) {
     if (err.response && err.response.status === 401) {
       const data = err.response.data;
@@ -74,7 +74,7 @@ async function handleLogin() {
 </script>
 
 <template>
-  <div class="container">
+  <div class="container-fluid">
     <div class="login-form">
       <form @submit.prevent="handleLogin">
         <h1>Đăng nhập</h1>
@@ -101,27 +101,28 @@ async function handleLogin() {
           {{ errors.password.value }}
         </p>
 
-        <div class="remember">
-          <label>
+        <div class="option-row">
+          <label class="remember">
+            <input type="checkbox" />
             Remember me?
-            <input type="checkbox" id="remember" />
           </label>
+          <router-link to="/forgot-Password" class="forgotpass">Forgot Password</router-link>
         </div>
 
-        <div class="reg">
+        <!-- <div class="reg">
           Chưa có tài khoản?
           <router-link to="/register" class="fordwardRegister"
             >Đăng ký ngay!</router-link
           >
-        </div>
+        </div> -->
 
         <p v-if="error" class="error-message">{{ error }}</p>
 
         
         <button type="submit">Login</button>
-
       </form>
     </div>
+    
   </div>
 </template>
 
@@ -137,7 +138,7 @@ async function handleLogin() {
   padding-bottom: 10px;
 }
 
-.container {
+.container-fluid {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -193,15 +194,46 @@ async function handleLogin() {
 .login-form input:hover::placeholder {
   color: red;
 }
+    .login-form input[type="text"],
+    .login-form input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      border: 1px solid rgb(227, 227, 227);
+      outline: none;
+      font-size: 1rem;
+    }
+    
+    .login-form input:hover {
+      border-color: rgb(188, 23, 100);
+    }
 
-.remember {
+     .login-form input:hover::placeholder{
+        color: red;
+    }
+
+.option-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; 
   margin-bottom: 15px;
-  font-size: 0.9rem;
 }
 
-.remember input {
-  margin-right: 7px;
-  cursor: pointer;
+.remember {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: white;
+  gap: 6px; 
+  white-space: nowrap; 
+}
+
+.forgotpass {
+  color: blue;
+  font-size: 0.9rem;
+  text-decoration: none;
 }
 
 .reg {

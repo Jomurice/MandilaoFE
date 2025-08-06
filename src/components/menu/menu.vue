@@ -4,7 +4,7 @@
       <ul>
         <li
           v-for="cat in categories"
-          :key="cat.id"
+          :key="cat.id ?? 'all'"
           :class="{ active: cat.id === selectedCategoryId }"
           @click="selectCategory(cat.id)"
         >
@@ -13,23 +13,38 @@
       </ul>
     </aside>
 
-    <main class="product-list">
+    <main class="product-section">
       <div v-if="isLoading">Đang tải dữ liệu...</div>
       <div v-else-if="errorMessage">{{ errorMessage }}</div>
       <div v-else>
-        <div
-          class="product-item"
-          v-for="product in filteredProducts"
-          :key="product.id"
-        >
-          <img
-            :src="getMainImage(product)"
-            alt="product"
-            onerror="this.src='https://dummyimage.com/150x150/cccccc/000000&text=No+Image'"
-          />
-          <p class="product-name">{{ product.name }}</p>
-          <p class="product-price">{{ formatPrice(product.price) }}</p>
-          <button class="add-button" @click="addToCart(product)">Add</button>
+        <div class="product-grid">
+          <div
+            class="product-item"
+            v-for="product in products"
+            :key="product.id"
+          >
+            <img
+              :src="getImgUrl(product.images)"
+              alt="product"
+              onerror="this.src='https://dummyimage.com/150x150/cccccc/000000&text=No+Image'"
+            />
+            <p class="product-name">{{ product.name }}</p>
+            <p class="product-price">{{ formatPrice(product.price) }}</p>
+            <button class="add-button" @click="addToCart(product)">Add</button>
+          </div>
+        </div>
+
+        <div class="pagination">
+          <button @click="prevPage" :disabled="currentPage.value <= 1">Prev</button>
+          <button
+            v-for="page in totalPages"
+            :key="page"
+            :class="{ active: currentPage.value === page }"
+            @click="goToPage(page)"
+          >
+            {{ page }}
+          </button>
+          <button @click="nextPage" :disabled="currentPage.value >= totalPages">Next</button>
         </div>
       </div>
     </main>
@@ -37,85 +52,121 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted } from "vue";
 import axios from "axios";
-import { getImgUrl } from "../../assets/utils/imgScript";
+import getImgUrl from "../../assets/utils/imgScript";
+
 const categories = ref([]);
 const products = ref([]);
 const selectedCategoryId = ref(null);
 const isLoading = ref(true);
 const errorMessage = ref("");
+const currentPage = ref(1);
+const totalPages = ref(1);
+const pageSize = 12;
 
-// Format tiền
-const formatPrice = (price) => {
-  if (price === 0) return "0 VNĐ";
-  return price.toLocaleString("vi-VN") + " VNĐ";
+const formatPrice = (price) =>
+  price === 0 ? "0 VNĐ" : price.toLocaleString("vi-VN") + " VNĐ";
+
+const getMainImage = (product) => {
+  const mainImage = product.images?.find((img) => img.isMain);
+  return mainImage?.url || "https://dummyimage.com/150x150/cccccc/000000&text=No+Image";
 };
 
-const addToCart = (product) =>{
-  const cart =JSON.parse(localStorage.getItem('cart'));
+const addToCart = (product) => {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const existingItem = cart.find((item) => item.id === product.id);
 
-  const existingItem = cart.find(item => item.id === product.id);
-  if(existingItem){
+  if (existingItem) {
     existingItem.quantity += 1;
-  }else{
+  } else {
     cart.push({
       id: product.id,
       name: product.name,
       price: product.price,
       image: getMainImage(product),
-      quantity: 1
+      quantity: 1,
     });
   }
 
-  localStorage.setItem('cart', JSON.stringify(cart));
-}
-
-// Lấy ảnh chính từ danh sách ảnh
-const getMainImage = (product) => {
-  const mainImage = product.images?.find((img) => img.isMain);
-  return (
-    mainImage?.url ||
-    "https://dummyimage.com/150x150/cccccc/000000&text=No+Image"
-  );
+  localStorage.setItem("cart", JSON.stringify(cart));
 };
-
-// Lọc sản phẩm theo category
-const filteredProducts = computed(() => {
-  return products.value.filter(
-    (p) => p.id_category === selectedCategoryId.value
-  );
-});
 
 const selectCategory = (id) => {
   selectedCategoryId.value = id;
+  currentPage.value = 1;
+  loadProducts();
 };
 
-// Gọi API
+const goToPage = (page) => {
+  currentPage.value = page;
+  loadProducts();
+};
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+    loadProducts();
+  }
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+    loadProducts();
+  }
+};
+
+const loadProducts = async () => {
+  try {
+
+    isLoading.value = true;
+    errorMessage.value = "";
+
+    const loginInfo = JSON.parse(sessionStorage.getItem("userLogin"));
+    const token = loginInfo?.result?.token;
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+    let url = `http://localhost:8080/identity/product?page=${currentPage.value - 1}&size=${pageSize}&sortBy=name&direction=desc`;
+
+    if (selectedCategoryId.value !== null) {
+      url += `&categoryId=${selectedCategoryId.value}`;
+    }
+
+    const res = await axios.get(url, { headers });
+
+    products.value = Array.isArray(res.data.result?.content)
+      ? res.data.result.content
+      : [];
+
+    totalPages.value = res.data.result?.totalPages || 1;
+  } catch (error) {
+    console.error("error load product", error);
+    errorMessage.value = "Không thể tải dữ liệu từ server.";
+  } finally {
+    isLoading.value = false;
+  }
+};
+
 onMounted(async () => {
   try {
-    // const loginInfo = JSON.parse(sessionStorage.getItem("userLogin"));
-    // const token = loginInfo?.result?.token;
-    // const headers = { Authorization: `Bearer ${token}` };
+    isLoading.value = true;
+    const loginInfo = JSON.parse(sessionStorage.getItem("userLogin"));
+    const token = loginInfo?.result?.token;
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-    const [catRes, prodRes] = await Promise.all([
-      axios.get("http://localhost:8080/identity/category"),
-      axios.get("http://localhost:8080/identity/product"),
-    ]);
+    const catRes = await axios.get("http://localhost:8080/identity/category", {
+      headers,
+    });
 
-    categories.value = Array.isArray(catRes.data.result)
-      ? catRes.data.result
-      : [];
-    products.value = Array.isArray(prodRes.data.result)
-      ? prodRes.data.result
-      : [];
-    console.log(prodRes.data.result);
+    categories.value = [
+      { id: null, name: "Tất cả" },
+      ...(Array.isArray(catRes.data.result) ? catRes.data.result : []),
+    ];
 
-    if (categories.value.length > 0) {
-      selectedCategoryId.value = categories.value[0].id;
-    }
-  } catch (err) {
-    console.error("Lỗi khi tải dữ liệu:", err);
+    await loadProducts();
+  } catch (error) {
+    console.error("error load category: ", error);
     errorMessage.value = "Không thể tải dữ liệu từ server.";
   } finally {
     isLoading.value = false;
@@ -138,6 +189,7 @@ onMounted(async () => {
 .category-sidebar ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .category-sidebar li {
@@ -151,12 +203,15 @@ onMounted(async () => {
   border-left: 4px solid blue;
 }
 
-.product-list {
+.product-section {
   flex: 1;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 1rem;
   padding: 1rem;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
 }
 
 .product-item {
@@ -164,12 +219,20 @@ onMounted(async () => {
   border-radius: 8px;
   padding: 10px;
   text-align: center;
+  transition: 0.3s;
 }
 
 .product-item img {
-  width: 100%;
-  height: auto;
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
   border-radius: 4px;
+  display: block;
+  margin: 0 auto;
+}
+
+.product-name {
+  font-weight: bold;
 }
 
 .add-button {
@@ -179,5 +242,32 @@ onMounted(async () => {
   border: none;
   padding: 5px 10px;
   cursor: pointer;
+}
+.add-button:hover {
+  background-color: #fcb900;
+  zoom: 1;
+}
+
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pagination button {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: 0.2s;
+}
+
+.pagination button.active {
+  background-color: orange;
+  color: white;
+  font-weight: bold;
 }
 </style>
