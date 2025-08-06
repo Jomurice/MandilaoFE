@@ -46,7 +46,7 @@
       </div>
 
       <div class="mb-3">
-        <label class="form-label">Sản phẩm chính?</label>
+        <label class="form-label ">Sản phẩm chính?</label>
         <div class="form-check">
           <input class="form-check-input" type="radio" name="isMain" value="true" id="mainTrue">
           <label class="form-check-label" for="mainTrue">Chính</label>

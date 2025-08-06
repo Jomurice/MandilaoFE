@@ -119,6 +119,7 @@ const prevPage = () => {
 
 const loadProducts = async () => {
   try {
+
     isLoading.value = true;
     errorMessage.value = "";
 

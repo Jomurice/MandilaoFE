@@ -36,6 +36,10 @@
       </div>
     </nav>
 
+    <div>
+      <router-link to="/cart"><i class="fa-solid fa-bag-shopping"></i></router-link>
+    </div>
+
   
     <div v-if="showSearch" class="search-container">
       <input
