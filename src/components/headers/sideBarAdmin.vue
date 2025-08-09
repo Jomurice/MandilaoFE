@@ -4,7 +4,7 @@
       <li><router-link to="/admin/product">Products</router-link></li>
        <li><router-link to="/admin/category">Category</router-link></li>
       <li><router-link to="/admin/users">Users</router-link></li>
-      <li><router-link to="/admin/orders">Order</router-link></li>
+      <li><router-link to="/admin/order">Order</router-link></li>
       <li><router-link to="/admin/discount">Discount</router-link></li>
       <li><router-link to="/admin/table">Table</router-link></li>
       <li><router-link to="/admin/reports">Reports</router-link></li>

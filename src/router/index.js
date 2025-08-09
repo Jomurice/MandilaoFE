@@ -15,6 +15,8 @@ import CategoryManager from "../components/adminPanel/СategoriesManager.vue"
 import UsersManager from "../components/adminPanel/UsersManager.vue";
 import AdminTable from '../components/Table/AdminTable.vue'
 import forgotPass from '../components/account/forgotPass.vue'
+import OrderDetailModal from "../components/orderManager/OrderDetailModal.vue";
+import OrderList from "../components/orderManager/OrderList.vue";
 
 const routes = [
   { path: "/", name: "Home", component: HomeUser },
@@ -30,7 +32,7 @@ const routes = [
   { path: '/search',name: 'product-search',component: productSearch},
   { path: '/admin/table', name: 'AdminTable', component: AdminTable },
   { path: '/forgot-Password', name: 'forgotPass', component: forgotPass },
-
+ 
 
 
 
@@ -50,6 +52,10 @@ const routes = [
       path:'users',
       component: UsersManager
     },
+    {
+      path:"order",
+      component: OrderList
+    }
   ]
 }
 
