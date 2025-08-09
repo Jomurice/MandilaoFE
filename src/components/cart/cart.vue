@@ -96,7 +96,7 @@ onMounted(() =>{
 
     <div class="right">
       <textarea placeholder="Ghi chú" v-model="note"></textarea>
-      <button @click="placeCart">Gọi món</button>
+      <button @click="placeCart(cartItems)">Gọi món</button>
       <p class="error" v-if="err">{{ err }}</p>
       <p class="success" v-if="msg">{{ msg }}</p>
     </div>
