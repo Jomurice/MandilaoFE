@@ -5,7 +5,10 @@
 
       <div>
         <label for="email">Email:</label>
-        <input v-model="email" type="email" placeholder="Nhập email" required>
+        <div>
+          <input v-model="email" type="email" placeholder="Nhập email">
+          <p v-if="emailError" style="color:white">{{ emailError }}</p>
+        </div>
       </div>
 
 
@@ -33,16 +36,21 @@ import { ref} from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 
-    const email = ref('');
-    const otp = ref('');
-    const showOtpBox = ref(false);
-    const router = useRouter();
+  const email = ref("");
+  const otp = ref('');
+  const showOtpBox = ref(false);
+  const router = useRouter();
+  const emailError = ref("");
+
 
     async function submit() {
-        if(!email.value.trim()){
-            alert('Vui lòng nhập email hợp lệ.');
-            return;
-        }
+         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!email.value) {
+            return emailError.value = "Email không được để trống";
+          } else if (!regex.test(email.value)) {
+            return emailError.value = "Email không hợp lệ";
+          }
+        
 
         try{
         await axios.post('http://localhost:8080/identity/auth/forgot-password', { email: email.value });

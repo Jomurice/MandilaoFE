@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
-import { userStorage } from '../store/user'
+import { useUserStore } from '../store/user'
 
 
 const username = ref('');
@@ -11,7 +11,7 @@ const error = ref('');
 const router = useRouter();
 const isLoading = ref(false);
 
-const userStore = userStorage();
+const userStore = useUserStore();
 
 
 
@@ -32,8 +32,8 @@ function validation() {
     isValid = false;
   }
 
-  if (!password.value.trim() || password.value.length < 6) {
-    errors.password.value = "Mật khẩu ít nhất 6 ký tự";
+  if (!password.value.trim() || password.value.length < 3) {
+    errors.password.value = "Mật khẩu ít nhất 4 ký tự";
     isValid = false;
   }
 
@@ -48,7 +48,7 @@ async function handleLogin(){
   error.value = '';
   try{
     const resp = await axios.post(
-      "/api/auth/login",
+      "http://localhost:8080/identity/admin/login",
       {
         username: username.value,
         password: password.value
@@ -56,10 +56,10 @@ async function handleLogin(){
       {
         headers: {
            'Content-Type': 'application/json'
-        },
-        withCredentials: true
+        }
       }
     );
+    console.log(resp.data);
     
   }catch(err){
 if (err.response && err.response.status === 401) {

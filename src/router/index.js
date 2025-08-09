@@ -15,6 +15,7 @@ import CategoryManager from "../components/adminPanel/СategoriesManager.vue"
 import UsersManager from "../components/adminPanel/UsersManager.vue";
 import AdminTable from '../components/Table/AdminTable.vue'
 import forgotPass from '../components/account/forgotPass.vue'
+import OrderList from '../components/orderManager/OrderList.vue'
 
 const routes = [
   { path: "/", name: "Home", component: HomeUser },
@@ -50,6 +51,10 @@ const routes = [
       path:'users',
       component: UsersManager
     },
+    {
+      path:'Order-Manegerment',
+      component: OrderList
+    }
   ]
 }
 

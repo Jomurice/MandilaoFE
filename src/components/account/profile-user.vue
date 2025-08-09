@@ -73,7 +73,9 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '../store/user'
 
+const userStore = useUserStore()
 const form = ref({
     name: '',
     password: '',
@@ -95,20 +97,25 @@ const changePasswordForm = ref({
 const changePasswordError = ref('')
 
 // Lấy thông tin user khi component mount
-onMounted(async () => {
-    try {
-        const resp = await axios.get('/api/user/profile', {
-            withCredentials: true
-        })
-        form.value = {
-            ...form.value,
-            ...resp.data
-        }
-    } catch (e) {
-        err.value = 'Không thể tải thông tin người dùng.'
-        console.log(e)
-    }
+onMounted(()=>{
+    console.log(userStore.token)
+    console.log("user o header ne " + userStore.user)
+    getProfile();
+    userStore.loadFromStorage();
 })
+    async function getProfile(){
+        try{
+            const resp = await axios.get("http://localhost:8080/identity/users/my-info",{
+                headers: {
+                    Authorization: `Bearer ${userStore.token}`
+                }
+            })
+            console.log(resp.data.result);
+            // userStore.setUser(resp.data);
+        }catch(e){
+            err.value ="Lấy thông tin thất bại"
+        }
+    }
 
 async function updateProfile() {
     try {
