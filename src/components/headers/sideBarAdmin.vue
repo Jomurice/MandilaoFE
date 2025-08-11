@@ -4,11 +4,9 @@
       <li><router-link to="/admin/product">Products</router-link></li>
        <li><router-link to="/admin/category">Category</router-link></li>
       <li><router-link to="/admin/users">Users</router-link></li>
-<<<<<<< HEAD
-      <li><router-link to="/admin/order">Order</router-link></li>
-=======
+
       <li><router-link to="/admin/Order-Manegerment">Order</router-link></li>
->>>>>>> aeb128bd705c0fb44c628af6f508df39fa213a33
+
       <li><router-link to="/admin/discount">Discount</router-link></li>
       <li><router-link to="/admin/table">Table</router-link></li>
       <li><router-link to="/admin/reports">Reports</router-link></li>

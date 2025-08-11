@@ -15,12 +15,11 @@ import CategoryManager from "../components/adminPanel/СategoriesManager.vue"
 import UsersManager from "../components/adminPanel/UsersManager.vue";
 import AdminTable from '../components/Table/AdminTable.vue'
 import forgotPass from '../components/account/forgotPass.vue'
-<<<<<<< HEAD
-import OrderDetailModal from "../components/orderManager/OrderDetailModal.vue";
-import OrderList from "../components/orderManager/OrderList.vue";
-=======
+
+
+
 import OrderList from '../components/orderManager/OrderList.vue'
->>>>>>> aeb128bd705c0fb44c628af6f508df39fa213a33
+
 
 const routes = [
   { path: "/", name: "Home", component: HomeUser },
@@ -57,11 +56,9 @@ const routes = [
       component: UsersManager
     },
     {
-<<<<<<< HEAD
-      path:"order",
-=======
+
       path:'Order-Manegerment',
->>>>>>> aeb128bd705c0fb44c628af6f508df39fa213a33
+
       component: OrderList
     }
   ]

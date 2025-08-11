@@ -10,7 +10,6 @@ const error = ref("");
 const router = useRouter();
 const userStore = useUserStore();
 
-
 const errors = {
   username: ref(""),
   password: ref(""),
@@ -27,13 +26,14 @@ function validation() {
     isValid = false;
   }
 
-  if (!password.value.trim() || password.value.length < 3) {
-    errors.password.value = "Mật khẩu ít nhất 3 ký tự";
+  if (!password.value.trim() || password.value.length < 4) {
+    errors.password.value = "Mật khẩu ít nhất 4 ký tự";
     isValid = false;
   }
 
   return isValid;
 }
+
 async function handleLogin() {
   if (!validation()) return;
 
@@ -48,21 +48,20 @@ async function handleLogin() {
       },
       {
         headers: {
-          'Content-Type': 'application/json'
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
 
-    const token = resp.data.result.token; // 👉 Phải đặt token trước
-    await userStore.login({ token });     // 👉 Sau đó mới gọi login
+    const token = resp.data.result.token;
+    await userStore.login({ token });
 
-    // Gọi API lấy thông tin user, kèm Authorization header
     const profileResponse = await axios.get(
-      'http://localhost:8080/identity/users/my-info',
+      "http://localhost:8080/identity/users/my-info",
       {
         headers: {
           Authorization: `Bearer ${token}`,
-        }
+        },
       }
     );
 
@@ -78,7 +77,6 @@ async function handleLogin() {
     }
   }
 }
-
 </script>
 
 <template>
@@ -114,23 +112,16 @@ async function handleLogin() {
             <input type="checkbox" />
             Remember me?
           </label>
-          <router-link to="/forgot-Password" class="forgotpass">Forgot Password</router-link>
-        </div>
-
-        <!-- <div class="reg">
-          Chưa có tài khoản?
-          <router-link to="/register" class="fordwardRegister"
-            >Đăng ký ngay!</router-link
+          <router-link to="/forgot-Password" class="forgotpass"
+            >Forgot Password</router-link
           >
-        </div> -->
+        </div>
 
         <p v-if="error" class="error-message">{{ error }}</p>
 
-        
         <button type="submit">Login</button>
       </form>
     </div>
-    
   </div>
 </template>
 
@@ -150,12 +141,13 @@ async function handleLogin() {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  min-height: 90vh;
   background-image: url("/img/Background1.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  padding: 1rem;
 }
 
 .login-form {
@@ -166,8 +158,6 @@ async function handleLogin() {
   width: 100%;
   max-width: 400px;
   color: white;
-  position: relative;
-
 }
 
 .login-form h1 {
@@ -186,7 +176,6 @@ async function handleLogin() {
   font-size: 1rem;
 }
 
-
 .error-message {
   font-size: 0.9rem;
   color: #ffffff;
@@ -202,31 +191,14 @@ async function handleLogin() {
 .login-form input:hover::placeholder {
   color: red;
 }
-    .login-form input[type="text"],
-    .login-form input[type="password"] {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border-radius: 10px;
-      border: 1px solid rgb(227, 227, 227);
-      outline: none;
-      font-size: 1rem;
-    }
-    
-    .login-form input:hover {
-      border-color: rgb(188, 23, 100);
-    }
-
-     .login-form input:hover::placeholder{
-        color: red;
-    }
 
 .option-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%; 
+  width: 100%;
   margin-bottom: 15px;
+  flex-wrap: wrap;
 }
 
 .remember {
@@ -234,8 +206,8 @@ async function handleLogin() {
   align-items: center;
   font-size: 0.9rem;
   color: white;
-  gap: 6px; 
-  white-space: nowrap; 
+  gap: 6px;
+  white-space: nowrap;
 }
 
 .forgotpass {
@@ -244,26 +216,9 @@ async function handleLogin() {
   text-decoration: none;
 }
 
-.reg {
-  margin-bottom: 7px;
-}
-
-.reg > .fordwardRegister {
-  color: #143d60;
-  text-decoration: none;
-  font-weight: 600;
-  transition: all 0.1s;
-}
-
-.reg > .fordwardRegister:hover {
-  color: rgb(250, 244, 205);
-  border-bottom: 2px solid;
-}
-
-
 .login-form button {
   width: 40%;
-  margin: 10px auto; 
+  margin: 10px auto;
   padding: 10px;
   border: none;
   border-radius: 10px;
@@ -277,15 +232,55 @@ async function handleLogin() {
   text-align: center;
 }
 
-
 .login-form button:hover {
   background-color: rgb(225, 140, 3);
   color: #fff;
 }
 
-@media (max-width: 500px) {
+
+@media (max-width: 768px) {
+  .login-form {
+    padding: 1.5rem;
+    max-width: 90%;
+  }
+
+  .login-form button {
+    width: 100%;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
   .login-form {
     padding: 1rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  input {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  .option-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .remember {
+    font-size: 0.8rem;
+  }
+
+  .forgotpass {
+    font-size: 0.8rem;
+  }
+
+  .login-form button {
+    font-size: 0.9rem;
+    padding: 8px;
   }
 }
 </style>

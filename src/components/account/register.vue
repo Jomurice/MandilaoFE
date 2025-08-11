@@ -3,14 +3,12 @@ import { ref, reactive } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 
-
 const username = ref("");
 const password = ref("");
 const fullname = ref("");
 const phone = ref("");
 const dob = ref("");
 const email = ref("");
-
 
 const errors = reactive({
   username: "",
@@ -20,8 +18,8 @@ const errors = reactive({
   dob: "",
   email: "",
 });
-const router = useRouter();
 
+const router = useRouter();
 
 const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const regexPhone = /^(?:\+84|0)(3|5|7|8|9)[0-9]{8}$/;
@@ -32,19 +30,15 @@ function convertPhone(phoneInput) {
   return trimmed.startsWith("0") ? "+84" + trimmed.slice(1) : trimmed;
 }
 
-
 function validation() {
   let isValid = true;
 
-  
   errors.fullname = "";
   errors.email = "";
   errors.username = "";
   errors.phone = "";
   errors.password = "";
   errors.dob = "";
-
-
 
   if (!fullname.value.trim()) {
     errors.fullname = "Vui lòng nhập họ tên";
@@ -57,12 +51,9 @@ function validation() {
   }
 
   if (!username.value.trim() || username.value.match(regexCheckerSpace)) {
-
-    errors.username = "Username không dược có khoảng cách";
-    // errors.username = "Vui lòng nhập Username hợp lệ";
+    errors.username = "Username không được có khoảng cách";
     isValid = false;
   }
-
 
   if (!phone.value.trim() || !regexPhone.test(phone.value.trim())) {
     errors.phone = "Số điện thoại không hợp lệ";
@@ -81,7 +72,6 @@ function validation() {
 
   return isValid;
 }
-
 
 async function handleRegister() {
   if (!validation()) return;
@@ -123,37 +113,37 @@ async function handleRegister() {
         <div class="input-group">
           <label>Họ tên:</label>
           <input v-model="fullname" type="text" placeholder="Fullname" />
-          <span v-if="errors.fullname" class="error-message">{{ errors.fullname }}</span>
+          <span class="error-message">{{ errors.fullname }}</span>
         </div>
 
         <div class="input-group">
           <label>Username:</label>
           <input v-model="username" type="text" placeholder="Username" />
-          <span v-if="errors.username" class="error-message">{{ errors.username }}</span>
+          <span class="error-message">{{ errors.username }}</span>
         </div>
 
         <div class="input-group">
           <label>Email:</label>
           <input v-model="email" type="text" placeholder="Email" />
-          <span v-if="errors.email" class="error-message">{{ errors.email }}</span>
+          <span class="error-message">{{ errors.email }}</span>
         </div>
 
         <div class="input-group">
           <label>Mật khẩu:</label>
           <input v-model="password" type="password" placeholder="Password" />
-          <span v-if="errors.password" class="error-message">{{ errors.password }}</span>
+          <span class="error-message">{{ errors.password }}</span>
         </div>
 
         <div class="input-group">
           <label>SĐT:</label>
           <input v-model="phone" type="text" placeholder="SĐT" />
-          <span v-if="errors.phone" class="error-message">{{ errors.phone }}</span>
+          <span class="error-message">{{ errors.phone }}</span>
         </div>
 
         <div class="input-group">
           <label>Ngày sinh:</label>
           <input v-model="dob" type="date" />
-          <span v-if="errors.dob" class="error-message">{{ errors.dob }}</span>
+          <span class="error-message">{{ errors.dob }}</span>
         </div>
 
         <button type="submit">Đăng ký</button>
@@ -177,31 +167,26 @@ html {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100vw;
-  height: 100vh;
-  padding: 2rem;
+  width: 100%;
+  min-height: 90vh;
+  padding: 1rem;
   background-image: url("/img/Background1.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  overflow-y: auto;
-
 }
 
 .register-form {
   background: rgba(232, 123, 6, 0.85);
   padding: 2rem;
-
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   width: 100%;
-  max-width: 380px;
+  max-width: 400px;
   color: white;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-margin-left: 1rem;
-margin-right: 1rem;
 }
 
 .register-form h2 {
@@ -213,20 +198,11 @@ margin-right: 1rem;
   display: flex;
   flex-direction: column;
   gap: 5px;
-  position:relative;
 }
 
 .input-group input {
   width: 100%;
-  padding: 8px;
-  border-radius: 10px;
- 
-  border: 1px solid gray;
-  outline: none;
-  font-size: 1rem;
-
-  width: 100%;
-  padding: 8px;
+  padding: 10px;
   border-radius: 10px;
   border: 1px solid gray;
   outline: none;
@@ -235,16 +211,22 @@ margin-right: 1rem;
 
 .input-group .error-message {
   font-size: 0.85rem;
-  margin-bottom:5px ;
   color: #fff;
   font-weight: bold;
   text-decoration: underline;
+  min-height: 1.2em;
+  line-height: 1.2em;
+}
+
+.input-group .error-message:empty {
+  display: block;
+  visibility: hidden;
 }
 
 .register-form button {
   width: 100%;
   padding: 10px;
-  margin-top: 7px ;
+  margin-top: 7px;
   border: none;
   border-radius: 10px;
   font-weight: bold;
@@ -260,16 +242,24 @@ margin-right: 1rem;
   color: #fff;
 }
 
+/* Планшеты */
+@media (max-width: 768px) {
+  .register-form {
+    padding: 1.5rem;
+    max-width: 90%;
+  }
+}
+
 
 @media (max-width: 480px) {
   .register-form {
     padding: 1rem;
-    max-width: 100%;
     font-size: 0.95rem;
   }
 
   .input-group input {
     font-size: 0.9rem;
+    padding: 8px;
   }
 
   .register-form button {
@@ -278,4 +268,3 @@ margin-right: 1rem;
   }
 }
 </style>
-
