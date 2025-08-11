@@ -133,7 +133,7 @@ const loadProducts = async () => {
       url += `&categoryId=${selectedCategoryId.value}`;
     }
 
-    const res = await axios.get(url, { headers });
+    const res = await axios.get(url);
 
     products.value = Array.isArray(res.data.result?.content)
       ? res.data.result.content

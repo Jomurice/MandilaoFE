@@ -61,6 +61,7 @@ async function handleLogin(){
     );
     console.log(resp.data);
     sessionStorage.setItem("userLogin",JSON.stringify(resp.data));
+    router.push("/admin");
   }catch(err){
 if (err.response && err.response.status === 401) {
         const data = err.response.data;
