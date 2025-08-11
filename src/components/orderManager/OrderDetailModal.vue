@@ -2,16 +2,32 @@
   <div class="modal-overlay" v-if="show" @click.self="$emit('close')">
     <div class="modal-content">
       <div class="modal-header">
-        <h3>View Order</h3>
+        <h3>Chi tiết đơn hàng</h3>
       </div>
       <div class="modal-body">
-        <p>Id: ?? Giá: {{ formatCurrency(order.totalPrice) }} Ngày lập: {{ formatDate(order.createdAt) }}</p>
+        <!-- <p><strong>ID:</strong> {{ order.id }}</p>
+        <p><strong>Tổng tiền:</strong> {{ formatCurrency(order.totalPrice) }}</p>
+        <p><strong>Ngày tạo:</strong> {{ formatDate(order.createdAt) }}</p> -->
+
         <div class="order-items">
-          <div class="item" v-for="(item, index) in order.items" :key="index">
-            <span class="item-name">{{ item.name }}</span>
-            <span class="item-quantity">{{ item.quantity }}</span>
-            <span class="item-price">{{ formatCurrency(item.price) }}</span>
-          </div>
+          <h4>Sản phẩm:</h4>
+          <table style="width: 100%;">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            
+            <tbody >
+              <tr v-for="(item, index) in order" :key="index">
+                <td>{{ item.name }}</td>
+                <td>x{{ item.quantity }}</td>
+                <td>{{ formatCurrency(item.price) }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
       <div class="modal-footer">
@@ -23,7 +39,7 @@
 
 <script>
 export default {
-  name: 'OrderDetailModal',
+  name: "OrderDetailModal",
   props: {
     show: {
       type: Boolean,
@@ -34,22 +50,32 @@ export default {
       default: () => ({
         id: null,
         totalPrice: 0,
-        createdAt: '',
+        createdAt: "",
         items: []
       })
     }
   },
   methods: {
     formatCurrency(value) {
-      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+      return new Intl.NumberFormat("vi-VN", {
+        style: "currency",
+        currency: "VND"
+      }).format(value);
     },
     formatDate(dateString) {
-      const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-      return new Date(dateString).toLocaleDateString('vi-VN', options);
-    }
+      if (!dateString) return "";
+      const options = { day: "2-digit", month: "2-digit", year: "numeric" };
+      return new Date(dateString).toLocaleDateString("vi-VN", options);
+    },
+      getTotalPrice(orderItems) {
+      return orderItems.reduce((total, item) => total + (item.price), 0);
+  }
   }
 };
+
+
 </script>
+
 
 <style scoped>
 .modal-overlay {

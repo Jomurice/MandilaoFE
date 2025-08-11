@@ -60,6 +60,7 @@ async function handleLogin(){
       }
     );
     console.log(resp.data);
+    sessionStorage.setItem("userLogin",JSON.stringify(resp.data))
     
   }catch(err){
 if (err.response && err.response.status === 401) {
