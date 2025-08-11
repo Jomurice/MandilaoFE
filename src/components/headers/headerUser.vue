@@ -43,9 +43,9 @@
               </button>
               <ul class="dropdown-menu dropdown-menu-dark">
                 <li>
-                  <RouterLink to="/my-info" class="dropdown-item" href="#">Trang cá nhân</RouterLink>
+                  <RouterLink to="/profileuser" class="dropdown-item" >Trang cá nhân</RouterLink>
                 </li>
-                <li><button @click="logout" class="dropdown-item" href="#">Đăng xuất</button></li>
+                <li><button @click="logout" class="dropdown-item">Đăng xuất</button></li>
               </ul>
             </li>
           </div>

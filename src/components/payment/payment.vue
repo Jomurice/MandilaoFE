@@ -2,30 +2,31 @@
     <div class="admin-container">
       <main class="content">
         <section class="order-list">
-          <h2>Order</h2>
-          <div v-if="isLoading" class="loading-message">Đang tải đơn hàng...</div>
+          <h2>Hóa đơn</h2>
+          <div v-if="isLoading" class="loading-message">Đang tải hóa đơn...</div>
           <div v-else-if="errorMessage" class="error-message">{{ errorMessage }}</div>
-          <table v-else-if="orders.length > 0">
+          <table v-else-if="payments.length > 0">
             <thead>
               <tr>
-                <th>Id</th>
+                <th>Mã hóa đơn</th>
                 <th>Bàn</th>
+                <th>Tên thu ngân</th>
+                <th>Tên khách hàng</th>
                 <th>Tổng tiền</th>
-                <th>Ngày lập</th>
-                <th>Trạng thái</th>
+                <th>Ngày tạo hóa đơn</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="order in orders.filter(o => o.status !== 'PAID')" :key="order.id">
-                <td>{{ order.id }}</td>
-                <td>{{ order.name_table }}</td>
-                <td>{{ formatPrice(order.totailPrice) }}</td>
-                <td>{{ formatDate(order.createdAt) }}</td>
-                <td>{{ order.status }}</td>
-                <td >
-                  <button @click="viewOrderDetails(order.id)" class="view-button">Chi tiết</button>
-                  <button @click="payment(order)" class="view-button">Thanh toán</button>
+              <tr v-for="payment in payments" :key="payment.id">
+                <td>{{ payment.id }}</td>
+                 <td>{{ payment.name_table }}</td>
+                 <td>{{ payment.name_admin }}</td>
+                 <td>{{ payment.name_user }}</td>
+                 <td>{{ formatPrice(payment.totailPrice) }}</td>
+                <td>{{ formatDate(payment.payment_time) }}</td>
+                 <td >
+                  <button @click="viewOrderDetails(payment.id_order)" class="view-button">Chi tiết</button>
                 </td>
               </tr>
             </tbody>
@@ -49,18 +50,22 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
-import OrderDetailModal from './OrderDetailModal.vue';
-import { useRouter } from 'vue-router';
-
+import OrderDetailModal from '../orderManager/OrderDetailModal.vue';
 
 // Reactive variables
-const orders = ref([]);
+const payments = ref([]);
 const showModal = ref(false);
 const selectedOrderDetails = ref(null);
 const isLoading = ref(true);
 const errorMessage = ref("");
-const router = useRouter(); 
 
+
+  const formatPrice = (value) =>{
+      return new Intl.NumberFormat("vi-VN", {
+        style: "currency",
+        currency: "VND"
+      }).format(value);
+    };
 
 // Format ngày
 const formatDate = (dateString) => {
@@ -70,40 +75,27 @@ const formatDate = (dateString) => {
   return date.toLocaleDateString('vi-VN', options);
 };
 
-  const formatPrice = (value) =>{
-      return new Intl.NumberFormat("vi-VN", {
-        style: "currency",
-        currency: "VND"
-      }).format(value);
-    };
-
-
-const fetchOrders = async () => {
-  isLoading.value = true;
-  errorMessage.value = "";
-
+async function loadPayment() {
+  selectedOrderDetails.value = null; 
 
     const loginInfo = JSON.parse(sessionStorage.getItem("userLogin"));
     const token = loginInfo?.result?.token;
     const headers = { Authorization: `Bearer ${token}` };
-
-  try {
-
-    const response = await axios.get("http://localhost:8080/identity/admin/orders", { headers });
-    orders.value = Array.isArray(response.data.result) ? response.data.result : [];
-
-    console.log("Fetched Orders:", orders.value);
-
-  } catch (err) {
-    console.error("Lỗi khi tải danh sách đơn hàng:", err);
-    errorMessage.value = "Không thể tải danh sách đơn hàng từ server. Vui lòng thử lại.";
-    console.log("ggg",loginInfo)
-    console.log(token)
-  } finally {
+    
+    try {
+      const url = 'http://localhost:8080/identity/admin/find_payments'
+      const response = await axios.get(url,{headers})
+      payments.value = Array.isArray(response.data.result) ? response.data.result : []
+    } catch (error) {
+      console.error("Lỗi khi tải danh sách hóa đơn:", error);
+      errorMessage.value = "Không thể tải danh sách hóa đơn từ server. Vui lòng thử lại.";
+      console.log("ggg",loginInfo)
+      console.log(token)
+    }finally {
     isLoading.value = false;
   }
+}
 
-};
 
 // Hàm xem chi tiết đơn hàng khi click nút "View"
 const viewOrderDetails = async (orderId) => {
@@ -128,36 +120,6 @@ const viewOrderDetails = async (orderId) => {
   }
 };
 
-async function payment(order) {
-    const loginInfo = JSON.parse(sessionStorage.getItem("userLogin"));
-    const token = loginInfo?.result?.token;
-    const headers = { Authorization: `Bearer ${token}` };
-    const infoUser = JSON.parse(localStorage.getItem("user"))
-
-
-    const profileResponse = await axios.get(
-      'http://localhost:8080/identity/users/my-info',
-      {headers}
-    );
-
-    const payment = {
-      id_order: order.id,
-      name_table:order.name_table,
-      name_admin:profileResponse.data.result.fullName,
-      name_user:infoUser.fullName,
-    }
-    console.log(payment)
-    try {
-      const url = `http://localhost:8080/identity/admin/payment`
-      const response = await axios.put(url,payment,{headers})
-      console.log(response)
-      router.push('/admin/payment')
-    } catch (error) {
-      console.error(error);
-      alert("Thanh toán thất bại, vui lòng thử lại.");
-    }
-};
-
 // Hàm đóng modal
 const closeModal = () => {
   showModal.value = false;
@@ -166,12 +128,12 @@ const closeModal = () => {
 
 // Gọi fetchOrders khi component được mount
 onMounted(() => {
-  fetchOrders();
+  loadPayment();
 });
 </script>
 
 <style scoped>
-
+/* Các style cho headerAdmin component được wrap trong .header */
 .header {
   display: flex;
   justify-content: space-between;
@@ -267,8 +229,6 @@ th {
 .view-button {
   background-color: #4CAF50; /* Màu xanh lá */
   color: white;
-  margin-right: 10px;
-  margin-bottom: 10px;
   padding: 8px 12px;
   border: none;
   border-radius: 4px;

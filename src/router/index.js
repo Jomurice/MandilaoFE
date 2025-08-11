@@ -19,6 +19,7 @@ import forgotPass from '../components/account/forgotPass.vue'
 
 
 import OrderList from '../components/orderManager/OrderList.vue'
+import payment from "../components/payment/payment.vue";
 
 
 const routes = [
@@ -36,8 +37,6 @@ const routes = [
   { path: '/admin/table', name: 'AdminTable', component: AdminTable },
   { path: '/forgot-Password', name: 'forgotPass', component: forgotPass },
  
-
-
 
   {
   path: '/admin',
@@ -60,6 +59,10 @@ const routes = [
       path:'Order-Manegerment',
 
       component: OrderList
+    },
+    {
+      path:'payment',
+      component:payment
     }
   ]
 }

@@ -6,7 +6,11 @@
       <li><router-link to="/admin/users">Users</router-link></li>
 
       <li><router-link to="/admin/Order-Manegerment">Order</router-link></li>
+<<<<<<< HEAD
 
+=======
+      <li><router-link to="/admin/payment">Hóa đơn</router-link></li>
+>>>>>>> 9abfc9039e03c76506f9bac770ff6738254858cf
       <li><router-link to="/admin/discount">Discount</router-link></li>
       <li><router-link to="/admin/table">Table</router-link></li>
       <li><router-link to="/admin/reports">Reports</router-link></li>
