@@ -9,7 +9,7 @@
 
       <ul class="nav-links left" :class="{ show: mobileMenuOpen }">
         <li><router-link to="/" class="nav-item">Home</router-link></li>
-        <li><router-link to="/mon-an" class="nav-item">Món ăn</router-link></li>
+        <!-- <li><router-link to="/mon-an" class="nav-item">Món ăn</router-link></li> -->
         <li><router-link to="/eventPage" class="nav-item">Sự kiện</router-link></li>
         <li><router-link to="/menu" class="nav-item">Menu</router-link></li>
       </ul>

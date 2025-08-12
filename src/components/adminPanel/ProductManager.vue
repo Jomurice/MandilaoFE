@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
-
+import getImgUrl from "../../assets/utils/imgScript";
 const name = ref("");
 const description = ref("");
 const price = ref("");
@@ -152,7 +152,7 @@ onMounted(() => {
         </div>
       </div>
 
-      <button type="submit" class="btn btn-sm btn-orange">Tạo sản phẩm</button>
+      <button type="submit" class="btn btn-sm btn-secondary">Tạo sản phẩm</button>
     </form>
   </div>
 </div>
@@ -175,7 +175,7 @@ onMounted(() => {
     <tbody>
       <tr v-for="prod in products" :key="prod.id">
         <td>
-          <img :src="prod.images?.find(img => img.isMain)?.url" alt="Ảnh" width="50" height="50">
+          <img :src="getImgUrl(prod.images)" alt="Ảnh" width="50" height="50">
         </td>
         <td>{{ prod.name }}</td>
         <td>{{ prod.description }}</td>

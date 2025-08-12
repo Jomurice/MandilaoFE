@@ -1,5 +1,5 @@
 <script setup>
-
+import getImgUrl from '../../assets/utils/imgScript';
 
 import { ref , onMounted} from 'vue';
 import axios from 'axios';
@@ -54,6 +54,7 @@ async function placeCart(cartItems) {
 
   try {
     const url = "http://localhost:8080/identity/order/call";
+    console.log(cart);
     await axios.post(url, cart, {
       headers: {
         'Content-Type': 'application/json'
