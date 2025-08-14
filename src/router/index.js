@@ -15,9 +15,7 @@ import CategoryManager from "../components/adminPanel/СategoriesManager.vue"
 import UsersManager from "../components/adminPanel/UsersManager.vue";
 import AdminTable from '../components/Table/AdminTable.vue'
 import forgotPass from '../components/account/forgotPass.vue'
-
-
-
+import changePass from "../components/account/changePass.vue";
 import OrderList from '../components/orderManager/OrderList.vue'
 import payment from "../components/payment/payment.vue";
 
@@ -36,6 +34,7 @@ const routes = [
   { path: '/search',name: 'product-search',component: productSearch},
   { path: '/admin/table', name: 'AdminTable', component: AdminTable },
   { path: '/forgot-Password', name: 'forgotPass', component: forgotPass },
+  { path: '/change-Password', name: 'changePass', component: changePass },
  
 
   {

@@ -1,5 +1,5 @@
 <template>
-     <div id="app" class="forgot-password-container">
+     <div class="container-fluid">
     <div class="form-box">
       <h1>Quên mật khẩu</h1>
 
@@ -56,6 +56,7 @@ import { useRouter } from 'vue-router';
         await axios.post('http://localhost:8080/identity/auth/forgot-password', { email: email.value });
         showOtpBox.value = true;
         alert(`Đã gửi OTP đến ${email.value}`)
+        localStorage.setItem("email",email.value);
         return;
         }catch(err){
             alert('Lỗi gửi OTP !')
@@ -79,7 +80,7 @@ import { useRouter } from 'vue-router';
         }
         try {
             const resp = await axios.post('http://localhost:8080/identity/auth/verify-otp', {otp:otp.value })
-            router.push('/changePass')
+            router.push('/change-Password')
         } catch (error) {
             alert('Mã OTP không đúng hoặc đã hết hạn !')
         }
@@ -99,12 +100,13 @@ import { useRouter } from 'vue-router';
       height: 100%;
     }
 
-    .forgot-password-container {
-     display: flex;
+    .container-fluid {
+      display: flex;
       justify-content: center;
       align-items: center;
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      min-height: 91vh;
+      padding: 1rem;
       background-image: url("/img/Background1.jpg");
       background-size: cover;
       background-position: center;
